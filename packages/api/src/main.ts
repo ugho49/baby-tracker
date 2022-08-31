@@ -1,4 +1,5 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
+import helmet from '@fastify/helmet';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -11,6 +12,8 @@ async function createApp(prefix: string) {
   app.enableCors();
   app.enableShutdownHooks();
   app.setGlobalPrefix(prefix);
+
+  await app.register(helmet);
 
   return app;
 }
