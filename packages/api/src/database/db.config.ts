@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import migrations from './migrations';
 
 export default registerAs(
   'db',
@@ -12,5 +13,7 @@ export default registerAs(
     database: process.env.DB_NAME,
     autoLoadEntities: true,
     synchronize: false, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
+    migrationsRun: true,
+    migrations,
   })
 );
