@@ -1,11 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
 import { HealthCheck, HealthCheckService, TypeOrmHealthIndicator } from '@nestjs/terminus';
+import { Public } from '../auth/metadata/public.metadata';
 
 @Controller('health')
 export class HealthController {
-  constructor(private readonly health: HealthCheckService, private readonly dbHealthIndicator: TypeOrmHealthIndicator) {}
+  constructor(
+    private readonly health: HealthCheckService,
+    private readonly dbHealthIndicator: TypeOrmHealthIndicator
+  ) {}
 
   @Get()
+  @Public()
   @HealthCheck()
   check() {
     return this.health.check([async () => this.dbHealthIndicator.pingCheck('database', { timeout: 300 })]);
