@@ -1,7 +1,6 @@
-import { IsDateString, IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
-import { BabyGender, BabyRole } from '../enums';
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { BabyAuthority, BabyGender, BabyRole } from '../enums';
 import { BabyAuthorityTypes, BabyRoleTypes } from '../types';
-import { Type } from 'class-transformer';
 
 export interface BabyDto {
   id: string;
@@ -52,4 +51,18 @@ export class RegisterBabyDto {
   @IsNotEmpty()
   @IsEnum(BabyRole)
   relation_role: BabyRole;
+}
+
+export class AddBabyRelationDto {
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsEnum(BabyAuthority)
+  authority: BabyAuthority;
+
+  @IsNotEmpty()
+  @IsEnum(BabyRole)
+  role: BabyRole;
 }

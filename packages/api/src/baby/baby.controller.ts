@@ -3,6 +3,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
 import {
+  AddBabyRelationDto,
   BabyAuthority,
   BabyDto,
   BabyDtoWithRelations,
@@ -15,6 +16,18 @@ import { BabyEntity } from './baby.entity';
 @Controller('baby')
 export class BabyController {
   constructor(private readonly babyService: BabyService) {}
+
+  @Get('/:id')
+  @ApiOperation({ summary: 'Find baby by id' })
+  async findById(@Param('id') babyId: string, @AuthUser('userId') userId: string): Promise<BabyDtoWithRelations> {
+    return this.babyService.findById(babyId, userId);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Find all my babies' })
+  async findAll(@AuthUser('userId') userId: string): Promise<BabyDtoWithUserAuthority[]> {
+    return this.babyService.findAllByUserId(userId);
+  }
 
   @Post()
   @ApiOperation({ summary: 'Register a new Baby' })
@@ -33,15 +46,9 @@ export class BabyController {
     return babyEntity.toDto();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Find baby by id' })
-  async findById(@Param('id') babyId: string, @AuthUser('userId') userId: string): Promise<BabyDtoWithRelations> {
-    return this.babyService.findById(babyId, userId);
-  }
-
-  @Get()
-  @ApiOperation({ summary: 'Find all my babies' })
-  async findAll(@AuthUser('userId') userId: string): Promise<BabyDtoWithUserAuthority[]> {
-    return this.babyService.findAllByUserId(userId);
+  @Post('/:id/relation')
+  @ApiOperation({ summary: 'Add new baby relation' })
+  async addRelation(@Param('id') babyId: string, @AuthUser('userId') userId: string, @Body() dto: AddBabyRelationDto) {
+    await this.babyService.addRelation({ babyId, userId, dto });
   }
 }

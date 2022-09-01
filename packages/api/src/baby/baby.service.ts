@@ -1,8 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
 import { BabyEntity, BabyRelationEntity } from './baby.entity';
 import {
+  AddBabyRelationDto,
+  BabyAuthority,
   BabyAuthorityTypes,
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
@@ -39,6 +41,35 @@ export class BabyService {
       await manager.insert(BabyEntity, props.babyEntity);
       await manager.insert(BabyRelationEntity, relationEntity);
     });
+  }
+
+  async addRelation(props: { userId: string; babyId: string; dto: AddBabyRelationDto }): Promise<void> {
+    const { babyId, userId, dto } = props;
+
+    const userBabyRelation = await this.relationRepository.findOneBy({ userId, babyId });
+
+    if (!userBabyRelation) {
+      throw new NotFoundException('Baby not found');
+    }
+
+    if (userBabyRelation.authority !== BabyAuthority.ROLE_ADMIN) {
+      throw new UnauthorizedException('No sufficient right to add a relation');
+    }
+
+    const user = await this.userService.findByEmail(dto.email);
+
+    if (!user) {
+      throw new UnprocessableEntityException('No user match for email');
+    }
+
+    const newRelationEntity = BabyRelationEntity.create({
+      babyId: props.babyId,
+      userId: user.id,
+      authority: dto.authority,
+      role: dto.role,
+    });
+
+    await this.relationRepository.insert(newRelationEntity);
   }
 
   async findAllByUserId(userId: string): Promise<BabyDtoWithUserAuthority[]> {
