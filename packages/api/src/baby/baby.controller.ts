@@ -28,7 +28,7 @@ export class BabyController {
       birthPlace: registerBabyDto.birth_place,
     });
 
-    await this.babyService.create({ babyEntity, authority, userId });
+    await this.babyService.create({ babyEntity, authority, userId, role: registerBabyDto.relation_role });
 
     return babyEntity.toDto();
   }

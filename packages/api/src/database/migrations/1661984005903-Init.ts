@@ -42,6 +42,7 @@ export class Init1661984005903 implements MigrationInterface {
           user_id             UUID,
           baby_id             UUID,
           authority           VARCHAR(100)      NOT NULL,
+          role                VARCHAR(100)      NOT NULL,
           created_at          TIMESTAMPTZ       NOT NULL DEFAULT NOW(),
           updated_at          TIMESTAMPTZ       NOT NULL DEFAULT NOW(),
           PRIMARY KEY (user_id, baby_id)

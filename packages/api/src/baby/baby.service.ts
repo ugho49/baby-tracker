@@ -2,7 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
 import { BabyEntity, BabyRelationEntity } from './baby.entity';
-import { BabyAuthorityTypes, BabyDtoWithRelations, BabyDtoWithUserAuthority } from '@baby-tracker/common-types';
+import {
+  BabyAuthorityTypes,
+  BabyDtoWithRelations,
+  BabyDtoWithUserAuthority,
+  BabyRoleTypes,
+} from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
 import { uniq } from 'lodash';
 
@@ -17,13 +22,22 @@ export class BabyService {
     private readonly dataSource: DataSource
   ) {}
 
-  async create(props: { babyEntity: BabyEntity; userId: string; authority: BabyAuthorityTypes }): Promise<void> {
+  async create(props: {
+    babyEntity: BabyEntity;
+    userId: string;
+    authority: BabyAuthorityTypes;
+    role: BabyRoleTypes;
+  }): Promise<void> {
+    const relationEntity = BabyRelationEntity.create({
+      babyId: props.babyEntity.id,
+      userId: props.userId,
+      authority: props.authority,
+      role: props.role,
+    });
+
     await this.dataSource.transaction(async (manager) => {
       await manager.insert(BabyEntity, props.babyEntity);
-      await manager.insert(
-        BabyRelationEntity,
-        BabyRelationEntity.create({ babyId: props.babyEntity.id, userId: props.userId, authority: props.authority })
-      );
+      await manager.insert(BabyRelationEntity, relationEntity);
     });
   }
 
@@ -31,16 +45,20 @@ export class BabyService {
     const relations = await this.relationRepository.findBy({ userId });
     const babies = await this.babyRepository.findBy({ id: In(relations.map((r) => r.babyId)) });
 
-    return babies.map((entity) => ({
-      ...entity.toDto(),
-      user_authority: relations.find((r) => r.babyId === entity.id).authority,
-    }));
+    return babies.map((entity) => {
+      const relation = relations.find((r) => r.babyId === entity.id);
+
+      return {
+        ...entity.toDto(),
+        relation: { authority: relation.authority, role: relation.role },
+      };
+    });
   }
 
   async findById(babyId: string, userId: string): Promise<BabyDtoWithRelations> {
-    const relations = await this.relationRepository.findBy({ babyId, userId });
+    const relations = await this.relationRepository.findBy({ babyId });
 
-    if (relations.length === 0) {
+    if (!relations.find((r) => r.userId === userId)) {
       throw new NotFoundException();
     }
 
@@ -51,7 +69,13 @@ export class BabyService {
       ...baby.toDto(),
       relations: relations.map((r) => {
         const user = users.find((u) => u.id === r.userId);
-        return { authority: r.authority, id: r.userId, firstname: user.firstname, lastname: user.lastname };
+        return {
+          authority: r.authority,
+          id: r.userId,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          role: r.role,
+        };
       }),
     };
   }

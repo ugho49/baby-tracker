@@ -17,7 +17,7 @@ export default registerAs(
     synchronize: false, // Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.
     migrationsRun: true,
     migrations,
-    dropSchema: process.env.DB_DROP_SCHEMA === 'true' || false,
     logging: process.env.DB_VERBOSE === 'true' || false,
+    // dropSchema: true, // ⚠️⚠️ DEV MODE ONLY ⚠️⚠️ Uncomment this if you want to drop all database
   })
 );
