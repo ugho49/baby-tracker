@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Injectable()
@@ -10,12 +10,12 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>
   ) {}
 
-  findAll(): Promise<UserEntity[]> {
-    return this.userRepository.find();
-  }
-
   findById(id: string): Promise<UserEntity> {
     return this.userRepository.findOneBy({ id });
+  }
+
+  findByIds(ids: string[]): Promise<UserEntity[]> {
+    return this.userRepository.findBy({ id: In(ids) });
   }
 
   findByEmail(email: string): Promise<UserEntity> {
