@@ -29,6 +29,8 @@ async function createApp(prefix: string) {
     .setTitle('Baby Tracker')
     .setDescription('The Baby Tracker API')
     .setVersion('1.0')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT-Auth')
+    .addSecurityRequirements('JWT-Auth')
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

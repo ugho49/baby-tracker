@@ -1,5 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { PasswordManager, Public } from '../auth';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { AuthUser, PasswordManager, Public } from '../auth';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 import { RegisterDto, UserDto } from './user.dto';
@@ -9,6 +9,11 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get()
+  async getInfos(@AuthUser('userId') id: string) {
+    return UserDto.fromEntity(await this.userService.findById(id));
+  }
 
   @Public()
   @ApiOperation({ summary: 'Register a User' })

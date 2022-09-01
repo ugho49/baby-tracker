@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../../users/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from '../../users/user.entity';
-import { PasswordManager } from '../password-manager';
+import { PasswordManager } from '../util/password-manager';
 import { AuthenticationDto } from '../auth.dto';
 
 @Injectable()

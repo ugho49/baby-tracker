@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { Public } from './metadata/public.metadata';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './service/auth.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthenticationDto, LoginDto } from './auth.dto';
 
