@@ -29,7 +29,7 @@ export class Init1661984005903 implements MigrationInterface {
           lastname            VARCHAR(50)                       NOT NULL,
           birth_date          TIMESTAMP  WITHOUT TIME ZONE      NOT NULL DEFAULT NOW(),
           birth_place         VARCHAR(100),
-          gender              baby_gender,
+          gender              baby_gender                       NOT NULL,
           created_at          TIMESTAMPTZ                       NOT NULL DEFAULT NOW(),
           updated_at          TIMESTAMPTZ                       NOT NULL DEFAULT NOW(),
           PRIMARY KEY (id)
@@ -37,13 +37,13 @@ export class Init1661984005903 implements MigrationInterface {
     `);
 
     await runner.query(`
-      CREATE TABLE user_baby
+      CREATE TABLE baby_relation
       (
           user_id             UUID,
           baby_id             UUID,
-          authorities         VARCHAR(100)[] NOT NULL DEFAULT ARRAY ['ROLE_USER'],
-          created_at          TIMESTAMPTZ                       NOT NULL DEFAULT NOW(),
-          updated_at          TIMESTAMPTZ                       NOT NULL DEFAULT NOW(),
+          authority           VARCHAR(100)      NOT NULL,
+          created_at          TIMESTAMPTZ       NOT NULL DEFAULT NOW(),
+          updated_at          TIMESTAMPTZ       NOT NULL DEFAULT NOW(),
           PRIMARY KEY (user_id, baby_id)
       )
     `);
@@ -67,7 +67,7 @@ export class Init1661984005903 implements MigrationInterface {
 
   public async down(runner: QueryRunner): Promise<void> {
     await runner.query(`DROP TABLE baby_timeline`);
-    await runner.query(`DROP TABLE user_baby`);
+    await runner.query(`DROP TABLE baby_relation`);
     await runner.query(`DROP TABLE baby`);
     await runner.query(`DROP TYPE baby_gender CASCADE`);
     await runner.query(`DROP TABLE "user"`);

@@ -18,6 +18,6 @@ export default registerAs(
     migrationsRun: true,
     migrations,
     dropSchema: process.env.DB_DROP_SCHEMA === 'true' || false,
-    logging: true, // TODO add this to env settings
+    logging: process.env.DB_VERBOSE === 'true' || false,
   })
 );

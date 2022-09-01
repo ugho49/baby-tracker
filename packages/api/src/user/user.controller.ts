@@ -3,7 +3,7 @@ import { AuthUser, PasswordManager, Public } from '../auth';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { RegisterDto, UserDto } from '@baby-tracker/common-types';
+import { RegisterUserDto, UserDto } from '@baby-tracker/common-types';
 
 @ApiTags('user')
 @Controller('user')
@@ -19,7 +19,7 @@ export class UserController {
   @Public()
   @ApiOperation({ summary: 'Register a User' })
   @Post('register')
-  async register(@Body() registerDto: RegisterDto): Promise<UserDto> {
+  async register(@Body() registerDto: RegisterUserDto): Promise<UserDto> {
     return this.userService
       .save(
         UserEntity.create({

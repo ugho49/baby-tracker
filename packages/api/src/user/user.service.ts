@@ -7,30 +7,30 @@ import { UserEntity } from './user.entity';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly usersRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>
   ) {}
 
   findAll(): Promise<UserEntity[]> {
-    return this.usersRepository.find();
+    return this.userRepository.find();
   }
 
   findById(id: string): Promise<UserEntity> {
-    return this.usersRepository.findOneBy({ id });
+    return this.userRepository.findOneBy({ id });
   }
 
   findByEmail(email: string): Promise<UserEntity> {
-    return this.usersRepository.findOneBy({ email });
+    return this.userRepository.findOneBy({ email });
   }
 
   async save(user: UserEntity): Promise<UserEntity> {
     try {
-      return await this.usersRepository.save(user);
+      return await this.userRepository.save(user);
     } catch (e) {
       throw new UnprocessableEntityException();
     }
   }
 
   async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+    await this.userRepository.delete(id);
   }
 }
