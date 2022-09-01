@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { TimestampEntity, uuid } from '../database';
+import { UserDto } from '@baby-tracker/common-types';
 
 @Entity('user')
 export class UserEntity extends TimestampEntity {
@@ -28,5 +29,16 @@ export class UserEntity extends TimestampEntity {
     entity.lastname = props.lastname;
     entity.passwordEnc = props.passwordEnc;
     return entity;
+  }
+
+  public toDto(): UserDto {
+    return {
+      id: this.id,
+      firstname: this.firstname,
+      lastname: this.lastname,
+      email: this.email,
+      created_at: this.createdAt,
+      updated_at: this.updatedAt,
+    };
   }
 }

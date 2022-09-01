@@ -1,5 +1,4 @@
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
-import { UserEntity } from './user.entity';
 
 export class UserDto {
   id: string;
@@ -8,17 +7,6 @@ export class UserDto {
   email: string;
   created_at: Date;
   updated_at: Date;
-
-  static fromEntity(entity: UserEntity): UserDto {
-    return {
-      id: entity.id,
-      firstname: entity.firstname,
-      lastname: entity.lastname,
-      email: entity.email,
-      created_at: entity.createdAt,
-      updated_at: entity.updatedAt,
-    };
-  }
 }
 
 export class RegisterDto {
