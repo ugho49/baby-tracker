@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -7,7 +7,7 @@ import { UserEntity } from './user.entity';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>
+    private readonly usersRepository: Repository<UserEntity>
   ) {}
 
   findAll(): Promise<UserEntity[]> {
@@ -22,8 +22,12 @@ export class UserService {
     return this.usersRepository.findOneBy({ email });
   }
 
-  save(user: UserEntity): Promise<UserEntity> {
-    return this.usersRepository.save(user);
+  async save(user: UserEntity): Promise<UserEntity> {
+    try {
+      return await this.usersRepository.save(user);
+    } catch (e) {
+      throw new UnprocessableEntityException();
+    }
   }
 
   async remove(id: string): Promise<void> {

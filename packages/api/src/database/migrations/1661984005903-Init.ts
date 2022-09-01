@@ -25,8 +25,8 @@ export class Init1661984005903 implements MigrationInterface {
       CREATE TABLE baby
       (
           id                  UUID,
-          first_name          VARCHAR(50)                       NOT NULL,
-          last_name           VARCHAR(50)                       NOT NULL,
+          firstname           VARCHAR(50)                       NOT NULL,
+          lastname            VARCHAR(50)                       NOT NULL,
           birth_date          TIMESTAMP  WITHOUT TIME ZONE      NOT NULL DEFAULT NOW(),
           birth_place         VARCHAR(100),
           gender              baby_gender,
