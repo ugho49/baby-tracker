@@ -7,14 +7,16 @@ export class Init1661984005903 implements MigrationInterface {
       (
           id                  UUID,
           email               VARCHAR(200)   NOT NULL,
-          first_name          VARCHAR(50)    NOT NULL,
-          last_name           VARCHAR(50)    NOT NULL,
+          firstname           VARCHAR(50)    NOT NULL,
+          lastname            VARCHAR(50)    NOT NULL,
           password_enc        VARCHAR(500)   NOT NULL,
-          is_enabled          BOOLEAN        NOT NULL DEFAULT TRUE,
+          is_active           BOOLEAN        NOT NULL DEFAULT TRUE,
           created_at          TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
           updated_at          TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
           PRIMARY KEY (id)
-      )
+      );
+
+      CREATE UNIQUE INDEX user_email_unique_idx on "user" (LOWER(email));
     `);
 
     await runner.query(`

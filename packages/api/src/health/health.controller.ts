@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { HealthCheck, HealthCheckService, TypeOrmHealthIndicator } from '@nestjs/terminus';
-import { Public } from '../auth/metadata/public.metadata';
+import { Public } from '../auth';
 
 @Controller('health')
 export class HealthController {
