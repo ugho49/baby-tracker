@@ -11,7 +11,7 @@ export class AuthService {
 
   async login(user: { email: string; password: string }): Promise<AuthenticationDto> {
     const userEntity = await this.validateUser(user.email, user.password);
-    const payload = { email: user.email, sub: userEntity.id }; // TODO: add roles
+    const payload = { email: user.email, sub: userEntity.id };
     return {
       access_token: this.jwtService.sign(payload),
     };

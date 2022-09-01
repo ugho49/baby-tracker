@@ -59,6 +59,7 @@ export class BabyService {
     const user = await this.userService.findByEmail(dto.email);
 
     if (!user) {
+      // TODO: send an invitation, and save the relation somewhere
       throw new UnprocessableEntityException('No user match for email');
     }
 

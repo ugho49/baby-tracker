@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
@@ -17,9 +17,9 @@ import { BabyEntity } from './baby.entity';
 export class BabyController {
   constructor(private readonly babyService: BabyService) {}
 
-  @Get('/:id')
+  @Get('/:babyId')
   @ApiOperation({ summary: 'Find baby by id' })
-  async findById(@Param('id') babyId: string, @AuthUser('userId') userId: string): Promise<BabyDtoWithRelations> {
+  async findById(@Param('babyId') babyId: string, @AuthUser('userId') userId: string): Promise<BabyDtoWithRelations> {
     return this.babyService.findById(babyId, userId);
   }
 
@@ -46,9 +46,56 @@ export class BabyController {
     return babyEntity.toDto();
   }
 
-  @Post('/:id/relation')
+  @Post('/:babyId/relation')
   @ApiOperation({ summary: 'Add new baby relation' })
-  async addRelation(@Param('id') babyId: string, @AuthUser('userId') userId: string, @Body() dto: AddBabyRelationDto) {
+  async addRelation(
+    @Param('babyId') babyId: string,
+    @AuthUser('userId') userId: string,
+    @Body() dto: AddBabyRelationDto
+  ) {
     await this.babyService.addRelation({ babyId, userId, dto });
+  }
+
+  @Put('/:babyId')
+  @ApiOperation({ summary: 'Update baby' })
+  async update(@Param('babyId') babyId: string, @AuthUser('userId') userId: string) {
+    // TODO
+  }
+
+  @Delete('/:babyId')
+  @ApiOperation({ summary: 'Remove baby' })
+  async remove(@Param('babyId') babyId: string, @AuthUser('userId') userId: string) {
+    // TODO
+  }
+
+  @Post('/:babyId/timeline')
+  @ApiOperation({ summary: 'Add new baby timeline entry' })
+  async createTimelineEntry(
+    @Param('babyId') babyId: string,
+    @AuthUser('userId') userId: string,
+    @Body() dto: AddBabyRelationDto // TODO change this
+  ) {
+    // TODO
+  }
+
+  @Put('/:babyId/timeline/:timelineId')
+  @ApiOperation({ summary: 'Update timeline entry' })
+  async updateTimelineEntry(
+    @Param('babyId') babyId: string,
+    @Param('timelineId') timelineId: string,
+    @AuthUser('userId') userId: string,
+    @Body() dto: AddBabyRelationDto // TODO change this
+  ) {
+    // TODO
+  }
+
+  @Delete('/:babyId/timeline/:timelineId')
+  @ApiOperation({ summary: 'Delete timeline entry' })
+  async deleteTimelineEntry(
+    @Param('babyId') babyId: string,
+    @Param('timelineId') timelineId: string,
+    @AuthUser('userId') userId: string
+  ) {
+    // TODO
   }
 }
