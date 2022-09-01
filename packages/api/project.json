@@ -10,6 +10,11 @@
         "outputPath": "dist/packages/api",
         "main": "packages/api/src/main.ts",
         "tsConfig": "packages/api/tsconfig.app.json",
+        "tsPlugins": [
+          {
+            "name": "@nestjs/swagger/plugin"
+          }
+        ],
         "assets": []
       },
       "configurations": {

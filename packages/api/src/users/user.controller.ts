@@ -11,13 +11,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get the current user infos' })
   async getInfos(@AuthUser('userId') id: string): Promise<UserDto> {
     return this.userService.findById(id).then((entity) => entity.toDto());
   }
 
   @Public()
   @ApiOperation({ summary: 'Register a User' })
-  @ApiOkResponse({ type: UserDto })
   @Post('register')
   async register(@Body() registerDto: RegisterDto): Promise<UserDto> {
     return this.userService

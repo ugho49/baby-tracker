@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { Public } from './metadata/public.metadata';
 import { AuthService } from './service/auth.service';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthenticationDto, LoginDto } from '@baby-tracker/common-types';
 
 @ApiTags('auth')
@@ -11,7 +11,6 @@ export class AuthController {
 
   @Public()
   @ApiOperation({ summary: 'Get a access token' })
-  @ApiOkResponse({ type: AuthenticationDto })
   @Post('login')
   async login(@Body() loginDto: LoginDto): Promise<AuthenticationDto> {
     return this.authService.login(loginDto);
