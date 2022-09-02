@@ -24,7 +24,7 @@ export class BabyService {
     private readonly dataSource: DataSource
   ) {}
 
-  async create(props: {
+  async createBaby(props: {
     babyEntity: BabyEntity;
     userId: string;
     authority: BabyAuthorityTypes;
@@ -43,7 +43,7 @@ export class BabyService {
     });
   }
 
-  async addRelation(props: { userId: string; babyId: string; dto: AddBabyRelationDto }): Promise<void> {
+  async addRelation(props: { userId: string; babyId: string; dto: AddBabyRelationDto }): Promise<string> {
     const { babyId, userId, dto } = props;
 
     const userBabyRelation = await this.relationRepository.findOneBy({ userId, babyId });
@@ -71,6 +71,8 @@ export class BabyService {
     });
 
     await this.relationRepository.insert(newRelationEntity);
+
+    return newRelationEntity.id;
   }
 
   async findAllByUserId(userId: string): Promise<BabyDtoWithUserAuthority[]> {
@@ -102,8 +104,8 @@ export class BabyService {
       relations: relations.map((r) => {
         const user = users.find((u) => u.id === r.userId);
         return {
+          id: r.id,
           authority: r.authority,
-          id: r.userId,
           firstname: user.firstname,
           lastname: user.lastname,
           role: r.role,

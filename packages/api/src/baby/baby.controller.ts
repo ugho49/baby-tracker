@@ -8,6 +8,7 @@ import {
   BabyDto,
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
+  BabyRelationId,
   RegisterBabyDto,
 } from '@baby-tracker/common-types';
 import { BabyEntity } from './baby.entity';
@@ -41,7 +42,7 @@ export class BabyController {
       birthPlace: registerBabyDto.birth_place,
     });
 
-    await this.babyService.create({ babyEntity, authority, userId, role: registerBabyDto.relation_role });
+    await this.babyService.createBaby({ babyEntity, authority, userId, role: registerBabyDto.relation_role });
 
     return babyEntity.toDto();
   }
@@ -52,19 +53,39 @@ export class BabyController {
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
     @Body() dto: AddBabyRelationDto
-  ) {
-    await this.babyService.addRelation({ babyId, userId, dto });
+  ): Promise<BabyRelationId> {
+    const relationId = await this.babyService.addRelation({ babyId, userId, dto });
+    return { relation_id: relationId };
   }
 
-  @Delete('/:babyId/relation/:userId')
+  @Put('/:babyId/relation/:relationId')
+  @ApiOperation({ summary: 'Update baby relation' })
+  async updateRelation(
+    @Param('babyId') babyId: string,
+    @Param('relationId') relationId: string,
+    @AuthUser('userId') userId: string,
+    @Body() dto: AddBabyRelationDto // TODO change this
+  ) {
+    // TODO
+  }
+
+  @Delete('/:babyId/relation/:relationId')
   @ApiOperation({ summary: 'Delete baby relation' })
-  async deleteRelation(@Param('babyId') babyId: string, @Param('userId') userId: string) {
+  async deleteRelation(
+    @Param('babyId') babyId: string,
+    @Param('relationId') relationId: string,
+    @AuthUser('userId') userId: string
+  ) {
     // TODO
   }
 
   @Put('/:babyId')
   @ApiOperation({ summary: 'Update baby' })
-  async update(@Param('babyId') babyId: string, @AuthUser('userId') userId: string) {
+  async update(
+    @Param('babyId') babyId: string,
+    @AuthUser('userId') userId: string,
+    @Body() dto: AddBabyRelationDto // TODO change this
+  ) {
     // TODO
   }
 
@@ -79,8 +100,8 @@ export class BabyController {
   async getTimeline(
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
-    @Query('day') day?: string,
-    @Query('type') type?: string
+    @Query('day') day: string,
+    @Query('type') type: string
   ) {
     // TODO
   }

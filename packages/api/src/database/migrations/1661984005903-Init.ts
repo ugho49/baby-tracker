@@ -19,9 +19,9 @@ export class Init1661984005903 implements MigrationInterface {
       CREATE UNIQUE INDEX user_email_unique_idx on "user" (LOWER(email));
     `);
 
-    await runner.query(`
-      CREATE TYPE baby_gender AS ENUM ('GIRL', 'BOY');
+    await runner.query(`CREATE TYPE baby_gender AS ENUM ('GIRL', 'BOY')`);
 
+    await runner.query(`
       CREATE TABLE baby
       (
           id                  UUID,
@@ -39,14 +39,17 @@ export class Init1661984005903 implements MigrationInterface {
     await runner.query(`
       CREATE TABLE baby_relation
       (
-          user_id             UUID,
-          baby_id             UUID,
+          id                  UUID,
+          user_id             UUID              NOT NULL,
+          baby_id             UUID              NOT NULL,
           authority           VARCHAR(100)      NOT NULL,
           role                VARCHAR(100)      NOT NULL,
           created_at          TIMESTAMPTZ       NOT NULL DEFAULT NOW(),
           updated_at          TIMESTAMPTZ       NOT NULL DEFAULT NOW(),
-          PRIMARY KEY (user_id, baby_id)
-      )
+          PRIMARY KEY (id)
+      );
+
+      CREATE UNIQUE INDEX baby_relation_unique_idx ON baby_relation (user_id, baby_id);
     `);
 
     await runner.query(`
@@ -62,7 +65,8 @@ export class Init1661984005903 implements MigrationInterface {
           PRIMARY KEY (id)
       );
 
-      CREATE UNIQUE INDEX baby_timeline_baby_id_idx ON baby_timeline (baby_id);
+      CREATE INDEX baby_timeline_baby_id_idx ON baby_timeline (baby_id);
+      CREATE INDEX baby_timeline_type_idx ON baby_timeline (type);
     `);
   }
 

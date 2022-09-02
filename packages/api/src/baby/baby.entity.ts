@@ -54,9 +54,12 @@ export class BabyEntity extends TimestampEntity {
 @Entity('baby_relation')
 export class BabyRelationEntity extends TimestampEntity {
   @PrimaryColumn()
+  id: string = uuid();
+
+  @Column()
   babyId: string;
 
-  @PrimaryColumn()
+  @Column()
   userId: string;
 
   @Column()

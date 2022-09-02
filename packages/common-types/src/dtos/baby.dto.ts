@@ -2,7 +2,7 @@ import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsString, MaxLength, MinLeng
 import { BabyAuthority, BabyGender, BabyRole } from '../enums';
 import { BabyAuthorityTypes, BabyRoleTypes } from '../types';
 
-export interface BabyDto {
+export class BabyDto {
   id: string;
   firstname: string;
   lastname: string;
@@ -21,6 +21,10 @@ export interface BabyDtoWithUserAuthority extends BabyDto {
 
 export interface BabyDtoWithRelations extends BabyDto {
   relations: { id: string; firstname: string; lastname: string; authority: BabyAuthorityTypes; role: BabyRoleTypes }[];
+}
+
+export class BabyRelationId {
+  relation_id: string;
 }
 
 export class RegisterBabyDto {
