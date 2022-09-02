@@ -7,6 +7,7 @@ import {
   BabyAuthority,
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
+  BabyRole,
   RegisterBabyDto,
 } from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
@@ -80,7 +81,7 @@ export class BabyService {
 
       return {
         ...entity.toDto(),
-        relation: { authority: relation.authority, role: relation.role },
+        relation: { authority: BabyAuthority[relation.authority], role: BabyRole[relation.role] },
       };
     });
   }
@@ -96,10 +97,10 @@ export class BabyService {
         const user = users.find((u) => u.id === r.userId);
         return {
           id: r.id,
-          authority: r.authority,
           firstname: user.firstname,
           lastname: user.lastname,
-          role: r.role,
+          authority: BabyAuthority[r.authority],
+          role: BabyRole[r.role],
         };
       }),
     };

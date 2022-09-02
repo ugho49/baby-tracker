@@ -1,6 +1,5 @@
 import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 import { BabyAuthority, BabyGender, BabyRole } from '../enums';
-import { BabyAuthorityTypes, BabyRoleTypes } from '../types';
 
 export class BabyDto {
   id: string;
@@ -12,15 +11,23 @@ export class BabyDto {
   updated_at: Date;
 }
 
-export interface BabyDtoWithUserAuthority extends BabyDto {
-  relation: {
-    authority: BabyAuthorityTypes;
-    role: BabyRoleTypes;
-  };
+export class RoleAuthority {
+  authority: BabyAuthority;
+  role: BabyRole;
 }
 
-export interface BabyDtoWithRelations extends BabyDto {
-  relations: { id: string; firstname: string; lastname: string; authority: BabyAuthorityTypes; role: BabyRoleTypes }[];
+export class BabyDtoWithUserAuthority extends BabyDto {
+  relation: RoleAuthority;
+}
+
+export class BabyRelation extends RoleAuthority {
+  id: string;
+  firstname: string;
+  lastname: string;
+}
+
+export class BabyDtoWithRelations extends BabyDto {
+  relations: BabyRelation[];
 }
 
 export class BabyRelationId {

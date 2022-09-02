@@ -1,6 +1,12 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { TimestampEntity, uuid } from '../database';
-import { BabyAuthorityTypes, BabyDto, BabyGenderTypes, BabyRoleTypes } from '@baby-tracker/common-types';
+import {
+  BabyAuthorityTypes,
+  BabyDto,
+  BabyGenderTypes,
+  BabyRoleTypes,
+  BabyTimelineTypeTypes,
+} from '@baby-tracker/common-types';
 
 @Entity('baby')
 export class BabyEntity extends TimestampEntity {
@@ -67,6 +73,38 @@ export class BabyRelationEntity extends TimestampEntity {
 
   @Column()
   role: BabyRoleTypes;
+
+  public static create(props: {
+    babyId: string;
+    userId: string;
+    authority: BabyAuthorityTypes;
+    role: BabyRoleTypes;
+  }): BabyRelationEntity {
+    const entity = new BabyRelationEntity();
+    entity.babyId = props.babyId;
+    entity.userId = props.userId;
+    entity.authority = props.authority;
+    entity.role = props.role;
+    return entity;
+  }
+}
+
+@Entity('baby_timeline')
+export class BabyTimelineEntity extends TimestampEntity {
+  @PrimaryColumn()
+  id: string = uuid();
+
+  @Column()
+  babyId: string;
+
+  @Column()
+  type: BabyTimelineTypeTypes;
+
+  @Column({ type: 'jsonb' })
+  details: any;
+
+  @Column()
+  occurredAt: Date = new Date();
 
   public static create(props: {
     babyId: string;

@@ -21,3 +21,13 @@ export enum BabyGender {
   BOY = 'BOY',
   GIRL = 'GIRL',
 }
+
+export enum BabyTimelineType {
+  BREASTFEEDING = 'BREASTFEEDING',
+  BOTTLE_FEEDING = 'BOTTLE_FEEDING',
+  ACTIVITY = 'ACTIVITY',
+  DIAPER = 'DIAPER',
+  MEDICINE = 'MEDICINE',
+  NOTE = 'NOTE',
+  NAP = 'NAP',
+}
