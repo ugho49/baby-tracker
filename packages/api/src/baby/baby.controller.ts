@@ -72,7 +72,7 @@ export class BabyController {
     @Param('relationId') relationId: string,
     @AuthUser('userId') userId: string
   ) {
-    // TODO
+    await this.babyService.deleteRelation({ babyId, relationId, userId });
   }
 
   @Put('/:babyId')

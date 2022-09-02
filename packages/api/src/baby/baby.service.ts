@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
 import { BabyEntity, BabyRelationEntity } from './baby.entity';
@@ -23,8 +23,8 @@ export class BabyService {
     private readonly dataSource: DataSource
   ) {}
 
-  async createBaby(props: { userId: string; dto: RegisterBabyDto }): Promise<BabyEntity> {
-    const { userId, dto } = props;
+  async createBaby(param: { userId: string; dto: RegisterBabyDto }): Promise<BabyEntity> {
+    const { userId, dto } = param;
     const authority = BabyAuthority.ROLE_ADMIN;
     const babyEntity = BabyEntity.create({
       firstname: dto.firstname,
@@ -49,8 +49,8 @@ export class BabyService {
     return babyEntity;
   }
 
-  async addRelation(props: { babyId: string; dto: AddBabyRelationDto }): Promise<string> {
-    const { dto, babyId } = props;
+  async addRelation(param: { babyId: string; dto: AddBabyRelationDto }): Promise<string> {
+    const { dto, babyId } = param;
 
     const user = await this.userService.findByEmail(dto.email);
 
@@ -107,5 +107,27 @@ export class BabyService {
 
   async getBabyRelation(babyId: string, userId: string): Promise<BabyRelationEntity | undefined> {
     return (await this.relationRepository.findOneBy({ babyId, userId })) || undefined;
+  }
+
+  async deleteRelation(param: { babyId: string; relationId: string; userId: string }) {
+    const { babyId, relationId, userId } = param;
+    const babyRelations = await this.relationRepository.findBy({ babyId });
+    const relationToDelete = babyRelations.find((r) => r.id === relationId);
+
+    if (!relationToDelete) {
+      throw new NotFoundException();
+    }
+
+    if (babyRelations.length === 1) {
+      throw new UnauthorizedException('Baby should have one relation left');
+    }
+
+    const numberOfAdmins = babyRelations.filter((relation) => relation.authority === BabyAuthority.ROLE_ADMIN).length;
+
+    if (relationToDelete.userId === userId && numberOfAdmins === 1) {
+      throw new UnauthorizedException('Baby should have one admin left');
+    }
+
+    await this.relationRepository.delete({ id: relationId });
   }
 }
