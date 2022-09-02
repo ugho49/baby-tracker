@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
@@ -56,6 +56,12 @@ export class BabyController {
     await this.babyService.addRelation({ babyId, userId, dto });
   }
 
+  @Delete('/:babyId/relation/:userId')
+  @ApiOperation({ summary: 'Delete baby relation' })
+  async deleteRelation(@Param('babyId') babyId: string, @Param('userId') userId: string) {
+    // TODO
+  }
+
   @Put('/:babyId')
   @ApiOperation({ summary: 'Update baby' })
   async update(@Param('babyId') babyId: string, @AuthUser('userId') userId: string) {
@@ -65,6 +71,17 @@ export class BabyController {
   @Delete('/:babyId')
   @ApiOperation({ summary: 'Remove baby' })
   async remove(@Param('babyId') babyId: string, @AuthUser('userId') userId: string) {
+    // TODO
+  }
+
+  @Get('/:babyId/timeline')
+  @ApiOperation({ summary: 'Get timeline' })
+  async getTimeline(
+    @Param('babyId') babyId: string,
+    @AuthUser('userId') userId: string,
+    @Query('day') day?: string,
+    @Query('type') type?: string
+  ) {
     // TODO
   }
 
