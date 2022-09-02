@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
 import { BabyEntity, BabyRelationEntity } from './baby.entity';
@@ -49,18 +49,8 @@ export class BabyService {
     return babyEntity;
   }
 
-  async addRelation(props: { userId: string; babyId: string; dto: AddBabyRelationDto }): Promise<string> {
-    const { babyId, userId, dto } = props;
-
-    const userBabyRelation = await this.relationRepository.findOneBy({ userId, babyId });
-
-    if (!userBabyRelation) {
-      throw new NotFoundException('Baby not found');
-    }
-
-    if (userBabyRelation.authority !== BabyAuthority.ROLE_ADMIN) {
-      throw new UnauthorizedException('No sufficient right to add a relation');
-    }
+  async addRelation(props: { babyId: string; dto: AddBabyRelationDto }): Promise<string> {
+    const { dto, babyId } = props;
 
     const user = await this.userService.findByEmail(dto.email);
 
@@ -70,7 +60,7 @@ export class BabyService {
     }
 
     const newRelationEntity = BabyRelationEntity.create({
-      babyId: props.babyId,
+      babyId,
       userId: user.id,
       authority: dto.authority,
       role: dto.role,
@@ -95,13 +85,8 @@ export class BabyService {
     });
   }
 
-  async findById(babyId: string, userId: string): Promise<BabyDtoWithRelations> {
+  async findById(babyId: string): Promise<BabyDtoWithRelations> {
     const relations = await this.relationRepository.findBy({ babyId });
-
-    if (!relations.find((r) => r.userId === userId)) {
-      throw new NotFoundException();
-    }
-
     const baby = await this.babyRepository.findOneBy({ id: babyId });
     const users = await this.userService.findByIds(uniq(relations.map((r) => r.userId)));
 
@@ -118,5 +103,9 @@ export class BabyService {
         };
       }),
     };
+  }
+
+  async getBabyRelation(babyId: string, userId: string): Promise<BabyRelationEntity | undefined> {
+    return (await this.relationRepository.findOneBy({ babyId, userId })) || undefined;
   }
 }
