@@ -12,7 +12,7 @@ export class AuthController {
   @Public()
   @ApiOperation({ summary: 'Get a access token' })
   @Post('login')
-  async login(@Body() loginDto: LoginDto): Promise<AuthenticationDto> {
-    return this.authService.login(loginDto);
+  async login(@Body() dto: LoginDto): Promise<AuthenticationDto> {
+    return this.authService.login(dto);
   }
 }

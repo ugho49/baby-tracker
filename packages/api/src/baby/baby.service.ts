@@ -5,10 +5,9 @@ import { BabyEntity, BabyRelationEntity } from './baby.entity';
 import {
   AddBabyRelationDto,
   BabyAuthority,
-  BabyAuthorityTypes,
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
-  BabyRoleTypes,
+  RegisterBabyDto,
 } from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
 import { uniq } from 'lodash';
@@ -24,23 +23,30 @@ export class BabyService {
     private readonly dataSource: DataSource
   ) {}
 
-  async createBaby(props: {
-    babyEntity: BabyEntity;
-    userId: string;
-    authority: BabyAuthorityTypes;
-    role: BabyRoleTypes;
-  }): Promise<void> {
+  async createBaby(props: { userId: string; dto: RegisterBabyDto }): Promise<BabyEntity> {
+    const { userId, dto } = props;
+    const authority = BabyAuthority.ROLE_ADMIN;
+    const babyEntity = BabyEntity.create({
+      firstname: dto.firstname,
+      lastname: dto.lastname,
+      gender: dto.gender,
+      birthDate: dto.birth_date,
+      birthPlace: dto.birth_place,
+    });
+
     const relationEntity = BabyRelationEntity.create({
-      babyId: props.babyEntity.id,
-      userId: props.userId,
-      authority: props.authority,
-      role: props.role,
+      babyId: babyEntity.id,
+      userId,
+      authority,
+      role: dto.relation_role,
     });
 
     await this.dataSource.transaction(async (manager) => {
-      await manager.insert(BabyEntity, props.babyEntity);
+      await manager.insert(BabyEntity, babyEntity);
       await manager.insert(BabyRelationEntity, relationEntity);
     });
+
+    return babyEntity;
   }
 
   async addRelation(props: { userId: string; babyId: string; dto: AddBabyRelationDto }): Promise<string> {

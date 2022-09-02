@@ -4,14 +4,12 @@ import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
 import {
   AddBabyRelationDto,
-  BabyAuthority,
   BabyDto,
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
   BabyRelationId,
   RegisterBabyDto,
 } from '@baby-tracker/common-types';
-import { BabyEntity } from './baby.entity';
 
 @ApiTags('baby')
 @Controller('baby')
@@ -32,19 +30,8 @@ export class BabyController {
 
   @Post()
   @ApiOperation({ summary: 'Register a new Baby' })
-  async register(@AuthUser('userId') userId: string, @Body() registerBabyDto: RegisterBabyDto): Promise<BabyDto> {
-    const authority = BabyAuthority.ROLE_ADMIN;
-    const babyEntity = BabyEntity.create({
-      firstname: registerBabyDto.firstname,
-      lastname: registerBabyDto.lastname,
-      gender: registerBabyDto.gender,
-      birthDate: registerBabyDto.birth_date,
-      birthPlace: registerBabyDto.birth_place,
-    });
-
-    await this.babyService.createBaby({ babyEntity, authority, userId, role: registerBabyDto.relation_role });
-
-    return babyEntity.toDto();
+  async register(@AuthUser('userId') userId: string, @Body() dto: RegisterBabyDto): Promise<BabyDto> {
+    return this.babyService.createBaby({ userId, dto }).then((entity) => entity.toDto());
   }
 
   @Post('/:babyId/relation')

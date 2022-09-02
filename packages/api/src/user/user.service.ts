@@ -2,6 +2,8 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { RegisterUserDto } from '@baby-tracker/common-types';
+import { PasswordManager } from '../auth';
 
 @Injectable()
 export class UserService {
@@ -22,9 +24,16 @@ export class UserService {
     return this.userRepository.findOneBy({ email });
   }
 
-  async save(user: UserEntity): Promise<UserEntity> {
+  async save(dto: RegisterUserDto): Promise<UserEntity> {
     try {
-      return await this.userRepository.save(user);
+      return await this.userRepository.save(
+        UserEntity.create({
+          email: dto.email,
+          firstname: dto.firstname,
+          lastname: dto.lastname,
+          passwordEnc: await PasswordManager.hash(dto.password),
+        })
+      );
     } catch (e) {
       throw new UnprocessableEntityException();
     }
