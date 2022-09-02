@@ -8,6 +8,7 @@ import {
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
   BabyRelationId,
+  GetTimelineQueryDto,
   RegisterBabyDto,
 } from '@baby-tracker/common-types';
 
@@ -87,8 +88,7 @@ export class BabyController {
   async getTimeline(
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
-    @Query('day') day: string,
-    @Query('type') type: string
+    @Query() queryParams: GetTimelineQueryDto
   ) {
     // TODO
   }

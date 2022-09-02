@@ -70,3 +70,11 @@ export class AddBabyRelationDto {
   @IsEnum(BabyRole)
   role: BabyRole;
 }
+
+export class GetTimelineQueryDto {
+  @IsString()
+  day?: string;
+
+  @IsString()
+  type?: string;
+}
