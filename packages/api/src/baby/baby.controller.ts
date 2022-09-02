@@ -4,6 +4,7 @@ import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
 import {
   AddBabyRelationDto,
+  AddTimelineEntryDto,
   BabyAuthority,
   BabyDto,
   BabyDtoWithRelations,
@@ -110,8 +111,9 @@ export class BabyController {
   async createTimelineEntry(
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
-    @Body() dto: AddBabyRelationDto // TODO change this
+    @Body() dto: AddTimelineEntryDto // TODO change this
   ) {
+    console.log('dto', dto);
     // TODO
   }
 

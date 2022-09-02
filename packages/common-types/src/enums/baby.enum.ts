@@ -23,11 +23,15 @@ export enum BabyGender {
 }
 
 export enum BabyTimelineType {
-  BREASTFEEDING = 'BREASTFEEDING',
-  BOTTLE_FEEDING = 'BOTTLE_FEEDING',
+  MEAL = 'MEAL',
   ACTIVITY = 'ACTIVITY',
   DIAPER = 'DIAPER',
   MEDICINE = 'MEDICINE',
   NOTE = 'NOTE',
   NAP = 'NAP',
+}
+
+export enum DiaperType {
+  'POOP' = 'POOP',
+  'PEE' = 'PEE',
 }

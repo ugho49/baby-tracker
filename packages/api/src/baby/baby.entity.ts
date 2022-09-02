@@ -101,22 +101,22 @@ export class BabyTimelineEntity extends TimestampEntity {
   type: BabyTimelineTypeTypes;
 
   @Column({ type: 'jsonb' })
-  details: any;
+  details: unknown;
 
   @Column()
-  occurredAt: Date = new Date();
+  occurredAt: Date;
 
   public static create(props: {
     babyId: string;
-    userId: string;
-    authority: BabyAuthorityTypes;
-    role: BabyRoleTypes;
-  }): BabyRelationEntity {
-    const entity = new BabyRelationEntity();
+    type: BabyTimelineTypeTypes;
+    details: unknown;
+    occurredAt: Date;
+  }): BabyTimelineEntity {
+    const entity = new BabyTimelineEntity();
     entity.babyId = props.babyId;
-    entity.userId = props.userId;
-    entity.authority = props.authority;
-    entity.role = props.role;
+    entity.type = props.type;
+    entity.details = props.details;
+    entity.occurredAt = props.occurredAt;
     return entity;
   }
 }
