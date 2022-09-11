@@ -1,4 +1,4 @@
-import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { BabyAuthority, BabyGender, BabyRole } from '../enums';
 
 export class BabyDto {
@@ -78,4 +78,14 @@ export class AddBabyRelationDto {
   @IsNotEmpty()
   @IsEnum(BabyRole)
   role: BabyRole;
+}
+
+export class UpdateBabyRelationDto {
+  @IsOptional()
+  @IsEnum(BabyAuthority)
+  authority?: BabyAuthority;
+
+  @IsOptional()
+  @IsEnum(BabyRole)
+  role?: BabyRole;
 }

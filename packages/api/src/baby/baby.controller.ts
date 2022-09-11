@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
@@ -14,6 +14,7 @@ import {
   GetTimelineQueryDto,
   RegisterBabyDto,
   UpdateBabyDto,
+  UpdateBabyRelationDto,
 } from '@baby-tracker/common-types';
 import { HasBabyAuthorities } from './baby.guard';
 
@@ -54,16 +55,16 @@ export class BabyController {
     return { relation_id: relationId };
   }
 
-  @Put('/:babyId/relation/:relationId')
+  @Patch('/:babyId/relation/:relationId')
   @HasBabyAuthorities([BabyAuthority.ROLE_ADMIN])
   @ApiOperation({ summary: 'Update baby relation' })
   async updateRelation(
     @Param('babyId') babyId: string,
     @Param('relationId') relationId: string,
     @AuthUser('userId') userId: string,
-    @Body() dto: AddBabyRelationDto // TODO change this
-  ) {
-    // TODO
+    @Body() dto: UpdateBabyRelationDto
+  ): Promise<void> {
+    await this.babyService.updateRelation({ relationId, userId, babyId, dto });
   }
 
   @Delete('/:babyId/relation/:relationId')

@@ -20,6 +20,7 @@ import {
   GetTimelineQueryDto,
   RegisterBabyDto,
   UpdateBabyDto,
+  UpdateBabyRelationDto,
 } from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
 import { uniq } from 'lodash';
@@ -116,6 +117,39 @@ export class BabyService {
     await this.relationRepository.insert(newRelationEntity);
 
     return newRelationEntity.id;
+  }
+
+  async updateRelation(param: {
+    babyId: string;
+    relationId: string;
+    userId: string;
+    dto: UpdateBabyRelationDto;
+  }): Promise<void> {
+    const { dto, babyId, relationId, userId } = param;
+
+    const entity = await this.relationRepository.findOneBy({ id: relationId, babyId });
+
+    if (!entity) {
+      throw new NotFoundException('Relation not found');
+    }
+
+    if (dto.role) {
+      entity.role = dto.role;
+    }
+
+    if (dto.authority) {
+      const babyRelations = await this.relationRepository.findBy({ babyId });
+      const numberOfAdmins = babyRelations.filter((relation) => relation.authority === BabyAuthority.ROLE_ADMIN).length;
+
+      // Current user is an ADMIN, no check needed
+      if (entity.userId === userId && entity.authority !== dto.authority && numberOfAdmins === 1) {
+        throw new UnauthorizedException('Baby should have one admin left');
+      }
+
+      entity.authority = dto.authority;
+    }
+
+    await this.relationRepository.update({ id: relationId, babyId }, entity);
   }
 
   async findAllByUserId(userId: string): Promise<BabyDtoWithUserAuthority[]> {
