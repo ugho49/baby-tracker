@@ -2,7 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { RegisterUserDto } from '@baby-tracker/common-types';
+import { RegisterUserDto, UserDto } from '@baby-tracker/common-types';
 import { PasswordManager } from '../auth';
 
 @Injectable()
@@ -12,34 +12,32 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>
   ) {}
 
-  findById(id: string): Promise<UserEntity> {
-    return this.userRepository.findOneBy({ id });
+  findById(id: string): Promise<UserDto> {
+    return this.userRepository.findOneBy({ id }).then((entity) => entity.toDto());
   }
 
-  findByIds(ids: string[]): Promise<UserEntity[]> {
-    return this.userRepository.findBy({ id: In(ids) });
+  findByIds(ids: string[]): Promise<UserDto[]> {
+    return this.userRepository.findBy({ id: In(ids) }).then((entities) => entities.map((entity) => entity.toDto()));
   }
 
-  findByEmail(email: string): Promise<UserEntity> {
+  findEntityByEmail(email: string): Promise<UserEntity> {
     return this.userRepository.findOneBy({ email });
   }
 
-  async save(dto: RegisterUserDto): Promise<UserEntity> {
+  async save(dto: RegisterUserDto): Promise<UserDto> {
     try {
-      return await this.userRepository.save(
-        UserEntity.create({
-          email: dto.email,
-          firstname: dto.firstname,
-          lastname: dto.lastname,
-          passwordEnc: await PasswordManager.hash(dto.password),
-        })
-      );
+      return await this.userRepository
+        .save(
+          UserEntity.create({
+            email: dto.email,
+            firstname: dto.firstname,
+            lastname: dto.lastname,
+            passwordEnc: await PasswordManager.hash(dto.password),
+          })
+        )
+        .then((entity) => entity.toDto());
     } catch (e) {
       throw new UnprocessableEntityException();
     }
-  }
-
-  async remove(id: string): Promise<void> {
-    await this.userRepository.delete(id);
   }
 }

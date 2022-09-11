@@ -6,11 +6,12 @@ import {
   AddBabyRelationDto,
   AddTimelineEntryDto,
   BabyAuthority,
+  BabyDto,
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
   BabyRole,
   BabyTimelineDto,
-  BabyTimelineType,
+  GetTimelineQueryDto,
   RegisterBabyDto,
 } from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
@@ -29,7 +30,7 @@ export class BabyService {
     private readonly dataSource: DataSource
   ) {}
 
-  async createBaby(param: { userId: string; dto: RegisterBabyDto }): Promise<BabyEntity> {
+  async createBaby(param: { userId: string; dto: RegisterBabyDto }): Promise<BabyDto> {
     const { userId, dto } = param;
     const authority = BabyAuthority.ROLE_ADMIN;
     const babyEntity = BabyEntity.create({
@@ -52,13 +53,13 @@ export class BabyService {
       await manager.insert(BabyRelationEntity, relationEntity);
     });
 
-    return babyEntity;
+    return babyEntity.toDto();
   }
 
   async addRelation(param: { babyId: string; dto: AddBabyRelationDto }): Promise<string> {
     const { dto, babyId } = param;
 
-    const user = await this.userService.findByEmail(dto.email);
+    const user = await this.userService.findEntityByEmail(dto.email);
 
     if (!user) {
       // TODO: send an invitation, and save the relation somewhere
@@ -137,6 +138,14 @@ export class BabyService {
     await this.relationRepository.delete({ id: relationId });
   }
 
+  async getTimeline(param: { babyId: string; queryParams: GetTimelineQueryDto }): Promise<BabyTimelineDto[]> {
+    const { babyId, queryParams } = param;
+
+    // TODO
+
+    return undefined;
+  }
+
   async createTimelineEntry(param: {
     babyId: string;
     userId: string;
@@ -153,14 +162,6 @@ export class BabyService {
 
     await this.timelineRepository.insert(entity);
 
-    return {
-      id: entity.id,
-      details: dto.details,
-      type: BabyTimelineType[entity.type],
-      occurred_at: entity.occurredAt,
-      achieve_by: userId,
-      created_at: entity.createdAt,
-      updated_at: entity.updatedAt,
-    };
+    return entity.toDto();
   }
 }

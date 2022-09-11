@@ -108,7 +108,10 @@ export class GetTimelineQueryDto {
   day?: string;
 
   @IsString()
-  type?: string;
+  type?: BabyTimelineType;
+
+  @IsString()
+  userId?: string;
 }
 
 export class AddTimelineEntryDto {

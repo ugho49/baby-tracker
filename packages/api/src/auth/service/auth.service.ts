@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   private async validateUser(email: string, password: string): Promise<UserEntity> {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findEntityByEmail(email);
     if (user && (await PasswordManager.verify(user.passwordEnc, password))) {
       return user;
     }

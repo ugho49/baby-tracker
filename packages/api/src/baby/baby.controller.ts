@@ -38,7 +38,7 @@ export class BabyController {
   @Post()
   @ApiOperation({ summary: 'Register a new Baby' })
   async register(@AuthUser('userId') userId: string, @Body() dto: RegisterBabyDto): Promise<BabyDto> {
-    return this.babyService.createBaby({ userId, dto }).then((entity) => entity.toDto());
+    return this.babyService.createBaby({ userId, dto });
   }
 
   @Post('/:babyId/relation')
@@ -100,10 +100,9 @@ export class BabyController {
   @ApiOperation({ summary: 'Get timeline' })
   async getTimeline(
     @Param('babyId') babyId: string,
-    @AuthUser('userId') userId: string,
     @Query() queryParams: GetTimelineQueryDto
-  ) {
-    // TODO
+  ): Promise<BabyTimelineDto[]> {
+    return this.babyService.getTimeline({ babyId, queryParams });
   }
 
   @Post('/:babyId/timeline')

@@ -5,6 +5,8 @@ import {
   BabyDto,
   BabyGenderTypes,
   BabyRoleTypes,
+  BabyTimelineDto,
+  BabyTimelineType,
   BabyTimelineTypeTypes,
 } from '@baby-tracker/common-types';
 
@@ -123,5 +125,17 @@ export class BabyTimelineEntity extends TimestampEntity {
     entity.details = props.details;
     entity.occurredAt = props.occurredAt;
     return entity;
+  }
+
+  toDto(): BabyTimelineDto {
+    return {
+      id: this.id,
+      details: this.details,
+      type: BabyTimelineType[this.type],
+      occurred_at: this.occurredAt,
+      achieve_by: this.achieveBy,
+      created_at: this.createdAt,
+      updated_at: this.updatedAt,
+    };
   }
 }

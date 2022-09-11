@@ -12,13 +12,13 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Get the current user infos' })
   async getInfos(@AuthUser('userId') id: string): Promise<UserDto> {
-    return this.userService.findById(id).then((entity) => entity.toDto());
+    return this.userService.findById(id);
   }
 
   @Public()
   @ApiOperation({ summary: 'Register a User' })
   @Post('register')
   async register(@Body() dto: RegisterUserDto): Promise<UserDto> {
-    return this.userService.save(dto).then((entity) => entity.toDto());
+    return this.userService.save(dto);
   }
 }
