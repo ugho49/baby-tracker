@@ -34,7 +34,7 @@ export class BabyRelationId {
   relation_id: string;
 }
 
-export class RegisterBabyDto {
+export class UpdateBabyDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)
@@ -58,7 +58,9 @@ export class RegisterBabyDto {
   @IsNotEmpty()
   @IsEnum(BabyGender)
   gender: BabyGender;
+}
 
+export class RegisterBabyDto extends UpdateBabyDto {
   @IsNotEmpty()
   @IsEnum(BabyRole)
   relation_role: BabyRole;

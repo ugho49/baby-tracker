@@ -117,7 +117,7 @@ export class GetTimelineQueryDto {
   userId?: string;
 }
 
-export class AddTimelineEntryDto {
+export class AddOrUpdateTimelineEntryDto {
   @IsNotEmpty()
   @IsEnum(BabyTimelineType)
   type: BabyTimelineType;

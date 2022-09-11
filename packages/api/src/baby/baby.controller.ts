@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
 import {
   AddBabyRelationDto,
-  AddTimelineEntryDto,
+  AddOrUpdateTimelineEntryDto,
   BabyAuthority,
   BabyDto,
   BabyDtoWithRelations,
@@ -13,14 +13,14 @@ import {
   BabyTimelineDto,
   GetTimelineQueryDto,
   RegisterBabyDto,
+  UpdateBabyDto,
 } from '@baby-tracker/common-types';
 import { HasBabyAuthorities } from './baby.guard';
-import { REQUEST } from '@nestjs/core';
 
 @ApiTags('baby')
 @Controller('baby')
 export class BabyController {
-  constructor(private readonly babyService: BabyService, @Inject(REQUEST) private request: Request) {}
+  constructor(private readonly babyService: BabyService) {}
 
   @Get('/:babyId')
   @HasBabyAuthorities()
@@ -80,12 +80,8 @@ export class BabyController {
   @Put('/:babyId')
   @HasBabyAuthorities([BabyAuthority.ROLE_ADMIN])
   @ApiOperation({ summary: 'Update baby' })
-  async update(
-    @Param('babyId') babyId: string,
-    @AuthUser('userId') userId: string,
-    @Body() dto: AddBabyRelationDto // TODO change this
-  ) {
-    // TODO
+  async updateBaby(@Param('babyId') babyId: string, @Body() dto: UpdateBabyDto): Promise<BabyDto> {
+    return this.babyService.updateBaby({ babyId, dto });
   }
 
   @Delete('/:babyId')
@@ -111,7 +107,7 @@ export class BabyController {
   async createTimelineEntry(
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
-    @Body() dto: AddTimelineEntryDto
+    @Body() dto: AddOrUpdateTimelineEntryDto
   ): Promise<BabyTimelineDto> {
     return this.babyService.createTimelineEntry({ babyId, userId, dto });
   }
@@ -122,10 +118,9 @@ export class BabyController {
   async updateTimelineEntry(
     @Param('babyId') babyId: string,
     @Param('timelineId') timelineId: string,
-    @AuthUser('userId') userId: string,
-    @Body() dto: AddBabyRelationDto // TODO change this
-  ) {
-    // TODO
+    @Body() dto: AddOrUpdateTimelineEntryDto
+  ): Promise<BabyTimelineDto> {
+    return this.babyService.updateTimelineEntry({ timelineId, babyId, dto });
   }
 
   @Delete('/:babyId/timeline/:timelineId')

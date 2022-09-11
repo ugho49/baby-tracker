@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
 import { BabyEntity, BabyRelationEntity, BabyTimelineEntity } from './baby.entity';
 import {
   AddBabyRelationDto,
-  AddTimelineEntryDto,
+  AddOrUpdateTimelineEntryDto,
   BabyAuthority,
   BabyDto,
   BabyDtoWithRelations,
@@ -13,6 +19,7 @@ import {
   BabyTimelineDto,
   GetTimelineQueryDto,
   RegisterBabyDto,
+  UpdateBabyDto,
 } from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
 import { uniq } from 'lodash';
@@ -57,12 +64,36 @@ export class BabyService {
     return babyEntity.toDto();
   }
 
+  async updateBaby(param: { babyId: string; dto: UpdateBabyDto }): Promise<BabyDto> {
+    const { babyId, dto } = param;
+
+    const entity = await this.babyRepository.findOneBy({ id: babyId });
+
+    if (!entity) {
+      throw new NotFoundException('Baby not found');
+    }
+
+    entity.firstname = dto.firstname;
+    entity.lastname = dto.lastname;
+    entity.gender = dto.gender;
+    entity.birthDate = dto.birth_date;
+    entity.birthPlace = dto.birth_place;
+
+    await this.babyRepository.update({ id: babyId }, entity);
+
+    return entity.toDto();
+  }
+
   async deleteBaby(babyId: string): Promise<void> {
-    await this.dataSource.transaction(async (manager) => {
-      await manager.delete(BabyEntity, { id: babyId });
-      await manager.delete(BabyRelationEntity, { babyId });
-      await manager.delete(BabyTimelineEntity, { babyId });
-    });
+    try {
+      await this.dataSource.transaction(async (manager) => {
+        await manager.delete(BabyEntity, { id: babyId });
+        await manager.delete(BabyRelationEntity, { babyId });
+        await manager.delete(BabyTimelineEntity, { babyId });
+      });
+    } catch (e) {
+      throw new InternalServerErrorException('An error occurred when deleting the baby');
+    }
   }
 
   async addRelation(param: { babyId: string; dto: AddBabyRelationDto }): Promise<string> {
@@ -168,7 +199,7 @@ export class BabyService {
   async createTimelineEntry(param: {
     babyId: string;
     userId: string;
-    dto: AddTimelineEntryDto;
+    dto: AddOrUpdateTimelineEntryDto;
   }): Promise<BabyTimelineDto> {
     const { babyId, dto, userId } = param;
     const entity = BabyTimelineEntity.create({
@@ -184,8 +215,34 @@ export class BabyService {
     return entity.toDto();
   }
 
+  async updateTimelineEntry(param: {
+    babyId: string;
+    timelineId: string;
+    dto: AddOrUpdateTimelineEntryDto;
+  }): Promise<BabyTimelineDto> {
+    const { babyId, dto, timelineId } = param;
+
+    const entity = await this.timelineRepository.findOneBy({ id: timelineId, babyId });
+
+    if (!entity) {
+      throw new NotFoundException('Timeline entry not found');
+    }
+
+    entity.type = dto.type;
+    entity.details = dto.details;
+    entity.occurredAt = dto.occurredAt;
+
+    await this.timelineRepository.update({ id: timelineId, babyId }, entity);
+
+    return entity.toDto();
+  }
+
   async deleteTimelineEntry(param: { babyId: string; timelineId: string }): Promise<void> {
     const { babyId, timelineId } = param;
-    await this.timelineRepository.delete({ id: timelineId, babyId });
+    try {
+      await this.timelineRepository.delete({ id: timelineId, babyId });
+    } catch (e) {
+      throw new NotFoundException('Timeline entry not found');
+    }
   }
 }
