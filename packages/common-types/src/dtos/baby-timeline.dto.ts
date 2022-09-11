@@ -105,12 +105,15 @@ export const BabyTimelineDetailsDtos: BabyTimelineTypeDetail = {
 
 export class GetTimelineQueryDto {
   @IsString()
+  @IsOptional()
   day?: string;
 
   @IsString()
+  @IsOptional()
   type?: BabyTimelineType;
 
   @IsString()
+  @IsOptional()
   userId?: string;
 }
 

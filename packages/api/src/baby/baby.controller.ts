@@ -91,8 +91,8 @@ export class BabyController {
   @Delete('/:babyId')
   @HasBabyAuthorities([BabyAuthority.ROLE_ADMIN])
   @ApiOperation({ summary: 'Remove baby' })
-  async remove(@Param('babyId') babyId: string, @AuthUser('userId') userId: string) {
-    // TODO
+  async deleteBaby(@Param('babyId') babyId: string): Promise<void> {
+    await this.babyService.deleteBaby(babyId);
   }
 
   @Get('/:babyId/timeline')
@@ -131,11 +131,7 @@ export class BabyController {
   @Delete('/:babyId/timeline/:timelineId')
   @HasBabyAuthorities([BabyAuthority.ROLE_WRITE_USER])
   @ApiOperation({ summary: 'Delete timeline entry' })
-  async deleteTimelineEntry(
-    @Param('babyId') babyId: string,
-    @Param('timelineId') timelineId: string,
-    @AuthUser('userId') userId: string
-  ) {
-    // TODO
+  async deleteTimelineEntry(@Param('babyId') babyId: string, @Param('timelineId') timelineId: string): Promise<void> {
+    await this.babyService.deleteTimelineEntry({ babyId, timelineId });
   }
 }

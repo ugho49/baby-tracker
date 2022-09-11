@@ -16,6 +16,7 @@ import {
 } from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
 import { uniq } from 'lodash';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 @Injectable()
 export class BabyService {
@@ -54,6 +55,14 @@ export class BabyService {
     });
 
     return babyEntity.toDto();
+  }
+
+  async deleteBaby(babyId: string): Promise<void> {
+    await this.dataSource.transaction(async (manager) => {
+      await manager.delete(BabyEntity, { id: babyId });
+      await manager.delete(BabyRelationEntity, { babyId });
+      await manager.delete(BabyTimelineEntity, { babyId });
+    });
   }
 
   async addRelation(param: { babyId: string; dto: AddBabyRelationDto }): Promise<string> {
@@ -141,9 +150,19 @@ export class BabyService {
   async getTimeline(param: { babyId: string; queryParams: GetTimelineQueryDto }): Promise<BabyTimelineDto[]> {
     const { babyId, queryParams } = param;
 
-    // TODO
+    let where: FindOptionsWhere<BabyTimelineEntity> = { babyId };
 
-    return undefined;
+    if (queryParams.userId) {
+      where = { ...where, achieveBy: queryParams.userId };
+    }
+
+    if (queryParams.type) {
+      where = { ...where, type: queryParams.type };
+    }
+
+    // TODO: handle day query param
+
+    return this.timelineRepository.findBy(where).then((entities) => entities.map((entity) => entity.toDto()));
   }
 
   async createTimelineEntry(param: {
@@ -163,5 +182,10 @@ export class BabyService {
     await this.timelineRepository.insert(entity);
 
     return entity.toDto();
+  }
+
+  async deleteTimelineEntry(param: { babyId: string; timelineId: string }): Promise<void> {
+    const { babyId, timelineId } = param;
+    await this.timelineRepository.delete({ id: timelineId, babyId });
   }
 }
