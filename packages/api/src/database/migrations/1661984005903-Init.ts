@@ -57,6 +57,7 @@ export class Init1661984005903 implements MigrationInterface {
       (
           id                  UUID,
           baby_id             UUID                  NOT NULL,
+          achieve_by          UUID                  NOT NULL,
           type                VARCHAR(100)          NOT NULL,
           details             JSONB,
           occurred_at         TIMESTAMPTZ           NOT NULL DEFAULT NOW(),
@@ -66,6 +67,7 @@ export class Init1661984005903 implements MigrationInterface {
       );
 
       CREATE INDEX baby_timeline_baby_id_idx ON baby_timeline (baby_id);
+      CREATE INDEX baby_timeline_achieve_by_idx ON baby_timeline (achieve_by);
       CREATE INDEX baby_timeline_type_idx ON baby_timeline (type);
     `);
   }

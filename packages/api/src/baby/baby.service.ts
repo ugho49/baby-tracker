@@ -1,13 +1,16 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
-import { BabyEntity, BabyRelationEntity } from './baby.entity';
+import { BabyEntity, BabyRelationEntity, BabyTimelineEntity } from './baby.entity';
 import {
   AddBabyRelationDto,
+  AddTimelineEntryDto,
   BabyAuthority,
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
   BabyRole,
+  BabyTimelineDto,
+  BabyTimelineType,
   RegisterBabyDto,
 } from '@baby-tracker/common-types';
 import { UserService } from '../user/user.service';
@@ -20,6 +23,8 @@ export class BabyService {
     private readonly babyRepository: Repository<BabyEntity>,
     @InjectRepository(BabyRelationEntity)
     private readonly relationRepository: Repository<BabyRelationEntity>,
+    @InjectRepository(BabyTimelineEntity)
+    private readonly timelineRepository: Repository<BabyTimelineEntity>,
     private readonly userService: UserService,
     private readonly dataSource: DataSource
   ) {}
@@ -130,5 +135,32 @@ export class BabyService {
     }
 
     await this.relationRepository.delete({ id: relationId });
+  }
+
+  async createTimelineEntry(param: {
+    babyId: string;
+    userId: string;
+    dto: AddTimelineEntryDto;
+  }): Promise<BabyTimelineDto> {
+    const { babyId, dto, userId } = param;
+    const entity = BabyTimelineEntity.create({
+      babyId,
+      type: dto.type,
+      occurredAt: dto.occurredAt,
+      details: dto.details,
+      achieveBy: userId,
+    });
+
+    await this.timelineRepository.insert(entity);
+
+    return {
+      id: entity.id,
+      details: dto.details,
+      type: BabyTimelineType[entity.type],
+      occurred_at: entity.occurredAt,
+      achieve_by: userId,
+      created_at: entity.createdAt,
+      updated_at: entity.updatedAt,
+    };
   }
 }

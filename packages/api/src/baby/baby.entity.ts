@@ -95,6 +95,9 @@ export class BabyTimelineEntity extends TimestampEntity {
   id: string = uuid();
 
   @Column()
+  achieveBy: string;
+
+  @Column()
   babyId: string;
 
   @Column()
@@ -108,12 +111,14 @@ export class BabyTimelineEntity extends TimestampEntity {
 
   public static create(props: {
     babyId: string;
+    achieveBy: string;
     type: BabyTimelineTypeTypes;
     details: unknown;
     occurredAt: Date;
   }): BabyTimelineEntity {
     const entity = new BabyTimelineEntity();
     entity.babyId = props.babyId;
+    entity.achieveBy = props.achieveBy;
     entity.type = props.type;
     entity.details = props.details;
     entity.occurredAt = props.occurredAt;

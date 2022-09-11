@@ -10,6 +10,7 @@ import {
   BabyDtoWithRelations,
   BabyDtoWithUserAuthority,
   BabyRelationId,
+  BabyTimelineDto,
   GetTimelineQueryDto,
   RegisterBabyDto,
 } from '@baby-tracker/common-types';
@@ -111,10 +112,9 @@ export class BabyController {
   async createTimelineEntry(
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
-    @Body() dto: AddTimelineEntryDto // TODO change this
-  ) {
-    console.log('dto', dto);
-    // TODO
+    @Body() dto: AddTimelineEntryDto
+  ): Promise<BabyTimelineDto> {
+    return this.babyService.createTimelineEntry({ babyId, userId, dto });
   }
 
   @Put('/:babyId/timeline/:timelineId')

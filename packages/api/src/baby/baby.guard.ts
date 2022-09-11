@@ -62,6 +62,8 @@ export class BabyAuthorityGuard implements CanActivate {
       throw new ForbiddenException();
     }
 
+    request.relation = relation;
+
     return true;
   }
 }

@@ -16,7 +16,17 @@ import { BabyTimelineTypeDetail } from '../types';
 import { BabyTimelineType, DiaperType } from '../enums';
 import { plainToInstance, Type } from 'class-transformer';
 
-export class Breastfeading {
+export class BabyTimelineDto {
+  id: string;
+  type: BabyTimelineType;
+  details: unknown;
+  achieve_by: string;
+  occurred_at: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export class Breastfeeding {
   @IsBoolean()
   left: boolean;
 
@@ -27,8 +37,8 @@ export class Breastfeading {
 export class Meal {
   @ValidateNested()
   @ValidateIf((o) => o.quantity === undefined || o.breast)
-  @Type(() => Breastfeading)
-  breast: Breastfeading;
+  @Type(() => Breastfeeding)
+  breast: Breastfeeding;
 
   @IsString()
   @ValidateIf((o) => o.breast === undefined || o.quantity)
