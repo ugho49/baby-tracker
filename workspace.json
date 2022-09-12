@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "api": "packages/api",
+    "common-front": "packages/common-front",
     "common-types": "packages/common-types",
     "front": "packages/front"
   }

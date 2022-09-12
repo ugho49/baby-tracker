@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import App from './components/App';
-import { ApiProvider } from './apis/system/ApiContext';
+import { ApiProvider } from '@baby-tracker/common-front';
+import App from './App';
 import { apis } from './apis';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

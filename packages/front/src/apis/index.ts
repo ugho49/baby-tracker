@@ -1,7 +1,5 @@
-import { AnyApiFactory, createApiFactory } from './system/ApiFactory';
+import { AnyApiFactory, createApiFactory } from '@baby-tracker/common-front';
 import { BabyTrackerApiImpl, babyTrackerApiRef } from './baby-tracker.api';
-
-export * from './system/useApi';
 
 export const apis: AnyApiFactory[] = [
   createApiFactory({

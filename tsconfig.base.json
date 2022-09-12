@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@baby-tracker/common-front": ["packages/common-front/src/index.ts"],
       "@baby-tracker/common-types": ["packages/common-types/src/index.ts"]
     }
   },

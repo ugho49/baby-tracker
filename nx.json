@@ -28,5 +28,12 @@
     "appsDir": "packages",
     "libsDir": "packages"
   },
-  "defaultProject": "api"
+  "defaultProject": "api",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    }
+  }
 }
