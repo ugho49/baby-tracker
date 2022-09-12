@@ -1,0 +1,41 @@
+import { AxiosInstance } from 'axios';
+
+export interface BabyTrackerApi {
+  instance: AxiosInstance;
+  // login: (data: LoginRequest) => AxiosPromise<LoginResponse>;
+  // register: (data: RegisterRequest) => AxiosPromise<CreatedOutput>;
+  // sendResetUserPasswordEmail: (data: ResetPasswordInput) => AxiosPromise<void>;
+  // validateResetPassword: (data: ResetPasswordValidationInput) => AxiosPromise<void>;
+  // getMyEvents: (page: number) => AxiosPromise<PagedOutput<MyEventResponse>>;
+  // getEvent: (eventId: string) => AxiosPromise<EventOutput>;
+  // updateEvent: (eventId: string, data: UpdateEventInput) => AxiosPromise<void>;
+  // deleteEvent: (eventId: string) => AxiosPromise<void>;
+  // createEvent: (data: CreateEventInput) => AxiosPromise<CreatedOutput>;
+  // addAttendeeToEvent: (eventId: string, data: AddAttendeeInput) => AxiosPromise<Attendee>;
+  // deleteAttendeeOfEvent: (eventId: string, data: DeleteAttendeeInput) => AxiosPromise<void>;
+  // getAllEvents: (page: number) => AxiosPromise<PagedOutput<AdminEventResponse>>;
+  // getAdminEventById: (eventId: string) => AxiosPromise<EventOutput>;
+  // checkItem: (itemId: string) => AxiosPromise<void>;
+  // uncheckItem: (itemId: string) => AxiosPromise<void>;
+  // updateItem: (itemId: string, data: ItemInput) => AxiosPromise<void>;
+  // deleteItem: (itemId: string) => AxiosPromise<void>;
+  // getUserInfo: () => AxiosPromise<UserOutput>;
+  // searchUserByKeyword: (keyword: string) => AxiosPromise<MiniUser[]>;
+  // updateUser: (data: UpdateUserInput) => AxiosPromise<void>;
+  // changeUserPassword: (data: ChangePasswordInput) => AxiosPromise<void>;
+  // getUserEmailSettings: () => AxiosPromise<UserEmailSettingsOutput>;
+  // updateUserEmailSettings: (data: UserEmailSettingsInput) => AxiosPromise<UserEmailSettingsOutput>;
+  // getAllUsers: (page: number, q?: string) => AxiosPromise<PagedOutput<DetailledUserOutput>>;
+  // getUserById: (userId: string) => AxiosPromise<DetailledUserOutput>;
+  // deleteUser: (userId: string) => AxiosPromise<void>;
+  // updateAllUserDetails: (userId: string, data: UpdateFullUserProfileInput) => AxiosPromise<void>;
+  // getMyWishlists: (page: number) => AxiosPromise<PagedOutput<MyWishlistResponse>>;
+  // getWishlist: (wishlistId: string) => AxiosPromise<DetailledWishlistOutput>;
+  // updateWishlist: (wishlistId: string, data: UpdateWishlistInput) => AxiosPromise<void>;
+  // deleteWishlist: (wishlistId: string) => AxiosPromise<void>;
+  // createWishlist: (data: CreateWishlistInput) => AxiosPromise<CreatedOutput>;
+  // addWishlistToEvent: (wishlistId: string, eventId: string) => AxiosPromise<void>;
+  // deleteWishlistToEvent: (wishlistId: string, eventId: string) => AxiosPromise<void>;
+  // addItemsToWishlist: (wishlistId: string, data: ItemsInput) => AxiosPromise<Item[]>;
+  // getWishlistsEvents: () => AxiosPromise<MiniEvent[]>;
+}
