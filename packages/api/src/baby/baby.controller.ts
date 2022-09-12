@@ -5,18 +5,18 @@ import { BabyService } from './baby.service';
 import {
   AddBabyRelationDto,
   AddOrUpdateTimelineEntryDto,
-  BabyAuthority,
   BabyDto,
-  BabyDtoWithRelations,
-  BabyDtoWithUserAuthority,
-  BabyRelationId,
+  BabyRelationIdDto,
   BabyTimelineDto,
+  BabyWithRelationsDto,
+  BabyWithUserAuthorityDto,
   GetTimelineQueryDto,
   RegisterBabyDto,
   UpdateBabyDto,
   UpdateBabyRelationDto,
-} from '@baby-tracker/common-types';
+} from './baby.dto';
 import { HasBabyAuthorities } from './baby.guard';
+import { BabyAuthority } from '@baby-tracker/common-types';
 
 @ApiTags('baby')
 @Controller('baby')
@@ -26,13 +26,13 @@ export class BabyController {
   @Get('/:babyId')
   @HasBabyAuthorities()
   @ApiOperation({ summary: 'Find baby by id' })
-  async findById(@Param('babyId') babyId: string): Promise<BabyDtoWithRelations> {
+  async findById(@Param('babyId') babyId: string): Promise<BabyWithRelationsDto> {
     return this.babyService.findById(babyId);
   }
 
   @Get()
   @ApiOperation({ summary: 'Find all my babies' })
-  async findAll(@AuthUser('userId') userId: string): Promise<BabyDtoWithUserAuthority[]> {
+  async findAll(@AuthUser('userId') userId: string): Promise<BabyWithUserAuthorityDto[]> {
     return this.babyService.findAllByUserId(userId);
   }
 
@@ -50,7 +50,7 @@ export class BabyController {
     @AuthUser('userId') userId: string,
     @Body() dto: AddBabyRelationDto,
     @Req() request: any
-  ): Promise<BabyRelationId> {
+  ): Promise<BabyRelationIdDto> {
     const relationId = await this.babyService.addRelation({ babyId, dto });
     return { relation_id: relationId };
   }

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthUser, Public } from '../auth';
 import { UserService } from './user.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { RegisterUserDto, UserDto } from '@baby-tracker/common-types';
+import { RegisterUserDto, UserDto } from './user.dto';
 
 @ApiTags('user')
 @Controller('user')

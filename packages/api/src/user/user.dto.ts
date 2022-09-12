@@ -1,6 +1,7 @@
+import { RegisterUser, User } from '@baby-tracker/common-types';
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-export class UserDto {
+export class UserDto implements User {
   id: string;
   firstname: string;
   lastname: string;
@@ -9,7 +10,7 @@ export class UserDto {
   updated_at: Date;
 }
 
-export class RegisterUserDto {
+export class RegisterUserDto implements RegisterUser {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)

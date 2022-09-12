@@ -2,13 +2,12 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { TimestampEntity, uuid } from '../database';
 import {
   BabyAuthorityTypes,
-  BabyDto,
   BabyGenderTypes,
   BabyRoleTypes,
-  BabyTimelineDto,
   BabyTimelineType,
   BabyTimelineTypeTypes,
 } from '@baby-tracker/common-types';
+import { BabyDto, BabyTimelineDto } from './baby.dto';
 
 @Entity('baby')
 export class BabyEntity extends TimestampEntity {

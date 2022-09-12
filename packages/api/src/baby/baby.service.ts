@@ -11,20 +11,19 @@ import { BabyEntity, BabyRelationEntity, BabyTimelineEntity } from './baby.entit
 import {
   AddBabyRelationDto,
   AddOrUpdateTimelineEntryDto,
-  BabyAuthority,
   BabyDto,
-  BabyDtoWithRelations,
-  BabyDtoWithUserAuthority,
-  BabyRole,
   BabyTimelineDto,
+  BabyWithRelationsDto,
+  BabyWithUserAuthorityDto,
   GetTimelineQueryDto,
   RegisterBabyDto,
   UpdateBabyDto,
   UpdateBabyRelationDto,
-} from '@baby-tracker/common-types';
+} from './baby.dto';
 import { UserService } from '../user/user.service';
 import { uniq } from 'lodash';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
+import { BabyAuthority, BabyRole } from '@baby-tracker/common-types';
 
 @Injectable()
 export class BabyService {
@@ -152,7 +151,7 @@ export class BabyService {
     await this.relationRepository.update({ id: relationId, babyId }, entity);
   }
 
-  async findAllByUserId(userId: string): Promise<BabyDtoWithUserAuthority[]> {
+  async findAllByUserId(userId: string): Promise<BabyWithUserAuthorityDto[]> {
     const relations = await this.relationRepository.findBy({ userId });
     const babies = await this.babyRepository.findBy({ id: In(relations.map((r) => r.babyId)) });
 
@@ -166,7 +165,7 @@ export class BabyService {
     });
   }
 
-  async findById(babyId: string): Promise<BabyDtoWithRelations> {
+  async findById(babyId: string): Promise<BabyWithRelationsDto> {
     const relations = await this.relationRepository.findBy({ babyId });
     const baby = await this.babyRepository.findOneBy({ id: babyId });
     const users = await this.userService.findByIds(uniq(relations.map((r) => r.userId)));

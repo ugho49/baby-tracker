@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { Public } from './metadata/public.metadata';
-import { AuthService } from './service/auth.service';
+import { AuthService } from './auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthenticationDto, LoginDto } from '@baby-tracker/common-types';
+import { AuthenticationDto, LoginDto } from './auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')

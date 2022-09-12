@@ -2,7 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { RegisterUserDto, UserDto } from '@baby-tracker/common-types';
+import { RegisterUserDto, UserDto } from './user.dto';
 import { PasswordManager } from '../auth';
 
 @Injectable()

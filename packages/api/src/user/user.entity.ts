@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { TimestampEntity, uuid } from '../database';
-import { UserDto } from '@baby-tracker/common-types';
+import { UserDto } from './user.dto';
 
 @Entity('user')
 export class UserEntity extends TimestampEntity {
