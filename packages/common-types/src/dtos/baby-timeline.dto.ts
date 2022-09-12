@@ -129,7 +129,7 @@ export class AddOrUpdateTimelineEntryDto {
       validator: {
         async validate(value: any, args?: ValidationArguments): Promise<boolean> {
           if (!value) return false;
-          const type = args.object['type'];
+          const type = args?.object['type'];
           const DtoClass = BabyTimelineDetailsDtos[type];
           if (!DtoClass) return false;
           const dto = plainToInstance(DtoClass, value);
