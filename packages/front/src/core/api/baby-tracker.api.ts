@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { BabyTrackerApi } from '@baby-tracker/common-types';
 import { createApiRef } from '@baby-tracker/common-front';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 export const babyTrackerApiRef = createApiRef<BabyTrackerApi>({
   id: 'baby-tracker-api',
