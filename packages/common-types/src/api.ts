@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosPromise } from 'axios';
 import {
   AddBabyRelation,
   AddOrUpdateTimelineEntry,
@@ -19,19 +19,23 @@ import {
 
 export interface BabyTrackerApi {
   instance: AxiosInstance;
-  login: (data: Login) => Promise<Authentication>;
-  register: (data: RegisterUser) => Promise<User>;
-  getUserInfos: () => Promise<User>;
-  getBabyById: (babyId: string) => Promise<BabyWithRelations>;
-  getAllMyBabies: () => Promise<BabyWithUserAuthority[]>;
-  registerNewBaby: (data: RegisterBaby) => Promise<Baby>;
-  updateBaby: (babyId: string, data: UpdateBaby) => Promise<Baby>;
-  deleteBaby: (babyId: string) => Promise<void>;
-  getBabyTimeline: (babyId: string, params: GetTimelineQuery) => Promise<BabyTimeline[]>;
-  addBabyTimeline: (babyId: string, data: AddOrUpdateTimelineEntry) => Promise<BabyTimeline>;
-  updateBabyTimeline: (babyId: string, timelineId: string, data: AddOrUpdateTimelineEntry) => Promise<BabyTimeline>;
-  deleteBabyTimeline: (babyId: string, timelineId: string) => Promise<void>;
-  addBabyRelation: (babyId: string, data: AddBabyRelation) => Promise<BabyRelationId>;
-  updateBabyRelation: (babyId: string, relationId: string, data: UpdateBabyRelation) => Promise<void>;
-  deleteBabyRelation: (babyId: string, relationId: string) => Promise<void>;
+  login: (data: Login) => AxiosPromise<Authentication>;
+  register: (data: RegisterUser) => AxiosPromise<User>;
+  getUserInfos: () => AxiosPromise<User>;
+  getBabyById: (babyId: string) => AxiosPromise<BabyWithRelations>;
+  getAllMyBabies: () => AxiosPromise<BabyWithUserAuthority[]>;
+  registerNewBaby: (data: RegisterBaby) => AxiosPromise<Baby>;
+  updateBaby: (babyId: string, data: UpdateBaby) => AxiosPromise<Baby>;
+  deleteBaby: (babyId: string) => AxiosPromise<void>;
+  getBabyTimeline: (babyId: string, params: GetTimelineQuery) => AxiosPromise<BabyTimeline[]>;
+  addBabyTimeline: (babyId: string, data: AddOrUpdateTimelineEntry) => AxiosPromise<BabyTimeline>;
+  updateBabyTimeline: (
+    babyId: string,
+    timelineId: string,
+    data: AddOrUpdateTimelineEntry
+  ) => AxiosPromise<BabyTimeline>;
+  deleteBabyTimeline: (babyId: string, timelineId: string) => AxiosPromise<void>;
+  addBabyRelation: (babyId: string, data: AddBabyRelation) => AxiosPromise<BabyRelationId>;
+  updateBabyRelation: (babyId: string, relationId: string, data: UpdateBabyRelation) => AxiosPromise<void>;
+  deleteBabyRelation: (babyId: string, relationId: string) => AxiosPromise<void>;
 }
