@@ -1,5 +1,3 @@
-export type RegisterPageProps = {}
+export type RegisterPageProps = {};
 
-export default function RegisterPage(props: RegisterPageProps) {
-  return <div>RegisterPage</div>;
-}
+export const RegisterPage = (props: RegisterPageProps) => <div>RegisterPage</div>;
