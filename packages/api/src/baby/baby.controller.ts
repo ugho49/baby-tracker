@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthUser } from '../auth';
 import { BabyService } from './baby.service';
@@ -48,8 +48,7 @@ export class BabyController {
   async addRelation(
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
-    @Body() dto: AddBabyRelationDto,
-    @Req() request: any
+    @Body() dto: AddBabyRelationDto
   ): Promise<BabyRelationIdDto> {
     const relationId = await this.babyService.addRelation({ babyId, dto });
     return { relation_id: relationId };
@@ -74,7 +73,7 @@ export class BabyController {
     @Param('babyId') babyId: string,
     @Param('relationId') relationId: string,
     @AuthUser('userId') userId: string
-  ) {
+  ): Promise<void> {
     await this.babyService.deleteRelation({ babyId, relationId, userId });
   }
 

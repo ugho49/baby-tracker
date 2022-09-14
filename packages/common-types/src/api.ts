@@ -1,41 +1,37 @@
 import { AxiosInstance } from 'axios';
+import {
+  AddBabyRelation,
+  AddOrUpdateTimelineEntry,
+  Authentication,
+  Baby,
+  BabyRelationId,
+  BabyTimeline,
+  BabyWithRelations,
+  BabyWithUserAuthority,
+  GetTimelineQuery,
+  Login,
+  RegisterBaby,
+  RegisterUser,
+  UpdateBaby,
+  UpdateBabyRelation,
+  User,
+} from './types';
 
 export interface BabyTrackerApi {
   instance: AxiosInstance;
-  // login: (data: LoginRequest) => AxiosPromise<LoginResponse>;
-  // register: (data: RegisterRequest) => AxiosPromise<CreatedOutput>;
-  // sendResetUserPasswordEmail: (data: ResetPasswordInput) => AxiosPromise<void>;
-  // validateResetPassword: (data: ResetPasswordValidationInput) => AxiosPromise<void>;
-  // getMyEvents: (page: number) => AxiosPromise<PagedOutput<MyEventResponse>>;
-  // getEvent: (eventId: string) => AxiosPromise<EventOutput>;
-  // updateEvent: (eventId: string, data: UpdateEventInput) => AxiosPromise<void>;
-  // deleteEvent: (eventId: string) => AxiosPromise<void>;
-  // createEvent: (data: CreateEventInput) => AxiosPromise<CreatedOutput>;
-  // addAttendeeToEvent: (eventId: string, data: AddAttendeeInput) => AxiosPromise<Attendee>;
-  // deleteAttendeeOfEvent: (eventId: string, data: DeleteAttendeeInput) => AxiosPromise<void>;
-  // getAllEvents: (page: number) => AxiosPromise<PagedOutput<AdminEventResponse>>;
-  // getAdminEventById: (eventId: string) => AxiosPromise<EventOutput>;
-  // checkItem: (itemId: string) => AxiosPromise<void>;
-  // uncheckItem: (itemId: string) => AxiosPromise<void>;
-  // updateItem: (itemId: string, data: ItemInput) => AxiosPromise<void>;
-  // deleteItem: (itemId: string) => AxiosPromise<void>;
-  // getUserInfo: () => AxiosPromise<UserOutput>;
-  // searchUserByKeyword: (keyword: string) => AxiosPromise<MiniUser[]>;
-  // updateUser: (data: UpdateUserInput) => AxiosPromise<void>;
-  // changeUserPassword: (data: ChangePasswordInput) => AxiosPromise<void>;
-  // getUserEmailSettings: () => AxiosPromise<UserEmailSettingsOutput>;
-  // updateUserEmailSettings: (data: UserEmailSettingsInput) => AxiosPromise<UserEmailSettingsOutput>;
-  // getAllUsers: (page: number, q?: string) => AxiosPromise<PagedOutput<DetailledUserOutput>>;
-  // getUserById: (userId: string) => AxiosPromise<DetailledUserOutput>;
-  // deleteUser: (userId: string) => AxiosPromise<void>;
-  // updateAllUserDetails: (userId: string, data: UpdateFullUserProfileInput) => AxiosPromise<void>;
-  // getMyWishlists: (page: number) => AxiosPromise<PagedOutput<MyWishlistResponse>>;
-  // getWishlist: (wishlistId: string) => AxiosPromise<DetailledWishlistOutput>;
-  // updateWishlist: (wishlistId: string, data: UpdateWishlistInput) => AxiosPromise<void>;
-  // deleteWishlist: (wishlistId: string) => AxiosPromise<void>;
-  // createWishlist: (data: CreateWishlistInput) => AxiosPromise<CreatedOutput>;
-  // addWishlistToEvent: (wishlistId: string, eventId: string) => AxiosPromise<void>;
-  // deleteWishlistToEvent: (wishlistId: string, eventId: string) => AxiosPromise<void>;
-  // addItemsToWishlist: (wishlistId: string, data: ItemsInput) => AxiosPromise<Item[]>;
-  // getWishlistsEvents: () => AxiosPromise<MiniEvent[]>;
+  login: (data: Login) => Promise<Authentication>;
+  register: (data: RegisterUser) => Promise<User>;
+  getUserInfos: () => Promise<User>;
+  getBabyById: (babyId: string) => Promise<BabyWithRelations>;
+  getAllMyBabies: () => Promise<BabyWithUserAuthority[]>;
+  registerNewBaby: (data: RegisterBaby) => Promise<Baby>;
+  updateBaby: (babyId: string, data: UpdateBaby) => Promise<Baby>;
+  deleteBaby: (babyId: string) => Promise<void>;
+  getBabyTimeline: (babyId: string, params: GetTimelineQuery) => Promise<BabyTimeline[]>;
+  addBabyTimeline: (babyId: string, data: AddOrUpdateTimelineEntry) => Promise<BabyTimeline>;
+  updateBabyTimeline: (babyId: string, timelineId: string, data: AddOrUpdateTimelineEntry) => Promise<BabyTimeline>;
+  deleteBabyTimeline: (babyId: string, timelineId: string) => Promise<void>;
+  addBabyRelation: (babyId: string, data: AddBabyRelation) => Promise<BabyRelationId>;
+  updateBabyRelation: (babyId: string, relationId: string, data: UpdateBabyRelation) => Promise<void>;
+  deleteBabyRelation: (babyId: string, relationId: string) => Promise<void>;
 }
