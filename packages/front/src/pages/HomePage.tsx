@@ -6,6 +6,7 @@ import { Autocomplete, Avatar, Box, Button, Card, CardContent, Container, TextFi
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
+import { BabyGender } from '@baby-tracker/common-types';
 
 const mapState = (state: RootState) => ({ babies: state.baby.babies });
 
@@ -36,8 +37,8 @@ export const HomePage = () => {
                 onChange={(_, baby) => setBabyId(baby?.id || '')}
                 renderOption={(props, baby) => (
                   <Box component="li" {...props}>
-                    {baby.gender === 'BOY' && <MaleIcon />}
-                    {baby.gender === 'GIRL' && <FemaleIcon />}
+                    {baby.gender === BabyGender.BOY && <MaleIcon />}
+                    {baby.gender === BabyGender.GIRL && <FemaleIcon />}
                     &nbsp;
                     <span>
                       {baby.firstname} {baby.lastname}
