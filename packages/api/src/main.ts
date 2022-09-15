@@ -9,7 +9,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function createApp(prefix: string) {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, stopAtFirstError: true }));
   app.enableCors();
   app.enableShutdownHooks();
   app.setGlobalPrefix(prefix);

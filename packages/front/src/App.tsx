@@ -9,6 +9,7 @@ import { useApi } from '@baby-tracker/common-front';
 import { babyTrackerApiRef, RootState } from './core';
 import { useEffect } from 'react';
 import { setUser } from './core/store/features';
+import { Navbar } from './components/Navbar';
 
 const AnonymousRouteContainerOutlet = () => (
   <Box
@@ -25,8 +26,10 @@ const AnonymousRouteContainerOutlet = () => (
 
 const PrivateRouteContainerOutlet = () => (
   // <main className="content">
-  //   <Navbar />
-  <Outlet />
+  <>
+    <Navbar />
+    <Outlet />
+  </>
   //   <Menu />
   // </main>
 );
