@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction, Container, Paper } from '@mui
 import React, { useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { BabyTimeline } from '../components/BabyTimeline';
 import { BabyRelation } from '../components/BabyRelation';
@@ -39,7 +39,7 @@ export const BabyPage = () => {
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation value={value} onChange={handleChange}>
           <BottomNavigationAction label="Timeline" value="timeline" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Relations" value="relations" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Relations" value="relations" icon={<EscalatorWarningIcon />} />
           <BottomNavigationAction label="Settings" value="settings" icon={<SettingsIcon />} />
         </BottomNavigation>
       </Paper>

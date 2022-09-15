@@ -8,23 +8,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useApi } from '@baby-tracker/common-front';
 import { babyTrackerApiRef, RootState } from './core';
 import { useEffect } from 'react';
-import { setUser } from './core/store/features';
+import { setBabies, setUser } from './core/store/features';
 import { Navbar } from './components/Navbar';
 import { BabyPage } from './pages/BabyPage';
 
 const AnonymousRouteContainerOutlet = () => (
-  <Box
-    sx={{
-      marginTop: 8,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    }}
-  >
-    <Container component="main" maxWidth="xs">
+  <Container component="main" maxWidth="xs">
+    <Box
+      sx={{
+        marginTop: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <Outlet />
-    </Container>
-  </Box>
+    </Box>
+  </Container>
 );
 
 const PrivateRouteContainerOutlet = () => (
@@ -45,6 +45,7 @@ export const App = () => {
   useEffect(() => {
     if (isLoggedIn) {
       api.getUserInfos().then((res) => dispatch(setUser(res.data)));
+      api.getAllMyBabies().then((res) => dispatch(setBabies(res.data)));
     }
   }, [token]);
 
