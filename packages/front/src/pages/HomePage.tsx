@@ -1,12 +1,14 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../core';
-import { FormEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete, Avatar, Box, Button, Card, CardContent, Container, TextField } from '@mui/material';
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import { BabyGender } from '@baby-tracker/common-types';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { RouterLink } from '@baby-tracker/common-front';
 
 const mapState = (state: RootState) => ({ babies: state.baby.babies });
 
@@ -55,6 +57,15 @@ export const HomePage = () => {
             </Box>
           </CardContent>
         </Card>
+        <Button
+          fullWidth
+          variant="outlined"
+          sx={{ mt: 5 }}
+          startIcon={<PersonAddIcon />}
+          onClick={() => navigate('/register-baby')}
+        >
+          Ajouter un bébé
+        </Button>
       </Box>
     </Container>
   );

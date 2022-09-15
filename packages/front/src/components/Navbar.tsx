@@ -16,12 +16,14 @@ import {
 import AdbIcon from '@mui/icons-material/Adb';
 import { RouterLink } from '@baby-tracker/common-front';
 import { RootState } from '../core';
+import { useNavigate } from 'react-router-dom';
 
 const mapState = (state: RootState) => ({ user: state.auth.user });
 
 export const Navbar = () => {
   const { user } = useSelector(mapState);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,6 +32,11 @@ export const Navbar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleProfile = () => {
+    handleCloseUserMenu();
+    navigate('/profile');
   };
 
   const handleLogout = () => {
@@ -85,6 +92,9 @@ export const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <MenuItem onClick={handleProfile}>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>

@@ -1,15 +1,21 @@
-import { BottomNavigation, BottomNavigationAction, Container, Paper } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Box, Container, Paper, Tab, Tabs, tabsClasses } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import RestoreIcon from '@mui/icons-material/Restore';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { BabyTimeline } from '../components/BabyTimeline';
-import { BabyRelation } from '../components/BabyRelation';
-import { BabySettings } from '../components/BabySettings';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { BabyTimeline } from '../components/baby/BabyTimeline';
+import { BabyRelation } from '../components/baby/BabyRelation';
+import { BabySettings } from '../components/baby/BabySettings';
+import { RootState } from '../core';
+import { useSelector } from 'react-redux';
+
+const mapState = (state: RootState) => ({ babies: state.baby.babies });
 
 export const BabyPage = () => {
   const { babyId } = useParams();
+  const { babies } = useSelector(mapState);
   const basePath = useMemo(() => `/baby/${babyId}`, [babyId]);
   const [value, setValue] = useState('');
   const navigate = useNavigate();
@@ -28,6 +34,30 @@ export const BabyPage = () => {
 
   return (
     <div>
+      <Paper elevation={3}>
+        <Tabs
+          value={babyId}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+          aria-label="visible arrows tabs example"
+          sx={{
+            [`& .${tabsClasses.scrollButtons}`]: {
+              '&.Mui-disabled': { opacity: 0.3 },
+            },
+          }}
+        >
+          <Tab icon={<PersonAddIcon />} iconPosition="start" onClick={() => navigate('/register-baby')} />
+
+          {(babies || []).map((baby) => (
+            <Tab
+              label={`${baby.firstname} ${baby.lastname[0]}`}
+              value={baby.id}
+              onClick={() => navigate(`/baby/${baby.id}`)}
+            />
+          ))}
+        </Tabs>
+      </Paper>
       <Container component="main" maxWidth="xs" sx={{ mt: 2 }}>
         <Routes>
           <Route path="timeline" element={<BabyTimeline />} />

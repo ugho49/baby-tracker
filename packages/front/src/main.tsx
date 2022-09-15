@@ -7,6 +7,7 @@ import { apis, store } from './core';
 import { App } from './App';
 import { theme } from './theme';
 import { AxiosInterceptor } from './core/router/AxiosInterceptor';
+import './styles.scss';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

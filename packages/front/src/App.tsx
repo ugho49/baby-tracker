@@ -11,6 +11,8 @@ import { useEffect } from 'react';
 import { setBabies, setUser } from './core/store/features';
 import { Navbar } from './components/Navbar';
 import { BabyPage } from './pages/BabyPage';
+import { RegisterBabyPage } from './pages/RegisterBabyPage';
+import { UserProfilePage } from './pages/UserProfilePage';
 
 const AnonymousRouteContainerOutlet = () => (
   <Container component="main" maxWidth="xs">
@@ -66,6 +68,8 @@ export const App = () => {
         <Route element={<PrivateRouteContainerOutlet />}>
           <Route path="/" element={<Navigate replace to="home" />} />
           <Route path="home" element={<HomePage />} />
+          <Route path="profile" element={<UserProfilePage />} />
+          <Route path="register-baby" element={<RegisterBabyPage />} />
           <Route path="baby/:babyId/*" element={<BabyPage />} />
         </Route>
       )}
