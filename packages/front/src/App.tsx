@@ -4,8 +4,11 @@ import { RegisterPage } from './pages/RegisterPage';
 import { Box, Container } from '@mui/material';
 import { HomePage } from './pages/HomePage';
 import { ShowRoomPage } from './pages/ShowRoomPage';
-
-export type AppProps = {};
+import { useDispatch, useSelector } from 'react-redux';
+import { useApi } from '@baby-tracker/common-front';
+import { babyTrackerApiRef, RootState } from './core';
+import { useEffect } from 'react';
+import { setUser } from './core/store/features';
 
 const AnonymousRouteContainerOutlet = () => (
   <Box
@@ -28,8 +31,19 @@ const PrivateRouteContainerOutlet = () => (
   // </main>
 );
 
-export const App = (props: AppProps) => {
-  const isLoggedIn = false;
+const mapState = (state: RootState) => ({ token: state.auth.token });
+
+export const App = () => {
+  const { token } = useSelector(mapState);
+  const isLoggedIn = token !== undefined;
+  const api = useApi(babyTrackerApiRef);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      api.getUserInfos().then((res) => dispatch(setUser(res.data)));
+    }
+  }, [token]);
 
   return (
     <Container component="main" maxWidth="xs">

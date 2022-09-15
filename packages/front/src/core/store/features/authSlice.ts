@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from '@baby-tracker/common-types';
+import { AuthService } from '../../services/auth.service';
+
+const authService = new AuthService();
 
 export interface AuthState {
-  user?: { id: string; email: string };
+  user?: User;
   token?: string;
 }
 
 const initialState: AuthState = {
-  user: undefined, // TODO -> jwtService.getUserInfoFromToken(),
-  token: undefined, // TODO -> jwtService.getTokenFromLocalStorage(),
+  user: undefined,
+  token: authService.getAccessTokenFromLocalStorage(),
 };
 
 export const authSlice = createSlice({
@@ -16,14 +20,14 @@ export const authSlice = createSlice({
   reducers: {
     setToken: (state, action: PayloadAction<string>) => {
       const token = action.payload;
-      // TODO -> jwtService.storeTokenInLocalStorage(token);
+      authService.storeAccessTokenInLocalStorage(token);
       state.token = token;
     },
     setUser: (state, action: PayloadAction<AuthState['user']>) => {
       state.user = action.payload;
     },
     logout: (state) => {
-      // TODO -> jwtService.removeTokenFromLocalStorage();
+      authService.removeAccessToken();
       state.user = undefined;
       state.token = undefined;
     },

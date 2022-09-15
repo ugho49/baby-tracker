@@ -6,15 +6,16 @@ import { ApiProvider } from '@baby-tracker/common-front';
 import { apis, store } from './core';
 import { App } from './App';
 import { theme } from './theme';
+import { AxiosInterceptor } from './core/router/AxiosInterceptor';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <ApiProvider apis={apis}>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <BrowserRouter>
+          <AxiosInterceptor />
           <App />
         </BrowserRouter>
       </ThemeProvider>
