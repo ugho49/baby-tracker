@@ -10,6 +10,7 @@ import { babyTrackerApiRef, RootState } from './core';
 import { useEffect } from 'react';
 import { setUser } from './core/store/features';
 import { Navbar } from './components/Navbar';
+import { BabyPage } from './pages/BabyPage';
 
 const AnonymousRouteContainerOutlet = () => (
   <Box
@@ -20,18 +21,17 @@ const AnonymousRouteContainerOutlet = () => (
       alignItems: 'center',
     }}
   >
-    <Outlet />
+    <Container component="main" maxWidth="xs">
+      <Outlet />
+    </Container>
   </Box>
 );
 
 const PrivateRouteContainerOutlet = () => (
-  // <main className="content">
-  <>
+  <div style={{ backgroundColor: '#f5f5f5', height: '100vh' }}>
     <Navbar />
     <Outlet />
-  </>
-  //   <Menu />
-  // </main>
+  </div>
 );
 
 const mapState = (state: RootState) => ({ token: state.auth.token });
@@ -49,28 +49,27 @@ export const App = () => {
   }, [token]);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Routes>
-        {!isLoggedIn && (
-          <>
-            <Route path="/" element={<ShowRoomPage />} />
+    <Routes>
+      {!isLoggedIn && (
+        <>
+          <Route path="/" element={<ShowRoomPage />} />
 
-            <Route element={<AnonymousRouteContainerOutlet />}>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-            </Route>
-          </>
-        )}
-
-        {isLoggedIn && (
-          <Route element={<PrivateRouteContainerOutlet />}>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/" element={<Navigate replace to="/home" />} />
+          <Route element={<AnonymousRouteContainerOutlet />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
           </Route>
-        )}
+        </>
+      )}
 
-        <Route path="*" element={<Navigate replace to="/" />} />
-      </Routes>
-    </Container>
+      {isLoggedIn && (
+        <Route element={<PrivateRouteContainerOutlet />}>
+          <Route path="/" element={<Navigate replace to="home" />} />
+          <Route path="home" element={<HomePage />} />
+          <Route path="baby/:babyId/*" element={<BabyPage />} />
+        </Route>
+      )}
+
+      <Route path="*" element={<Navigate replace to="/" />} />
+    </Routes>
   );
 };
