@@ -13,6 +13,7 @@ export type Baby = {
   lastname: string;
   birth_date: Date;
   birth_place?: string;
+  gender: BabyGender;
   created_at: Date;
   updated_at: Date;
 };

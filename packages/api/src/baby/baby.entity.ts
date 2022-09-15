@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { TimestampEntity, uuid } from '../database';
 import {
   BabyAuthorityTypes,
+  BabyGender,
   BabyGenderTypes,
   BabyRoleTypes,
   BabyTimelineType,
@@ -52,6 +53,7 @@ export class BabyEntity extends TimestampEntity {
       lastname: this.lastname,
       birth_date: this.birthDate,
       birth_place: this.birthPlace,
+      gender: BabyGender[this.gender],
       created_at: this.createdAt,
       updated_at: this.updatedAt,
     };

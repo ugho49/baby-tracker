@@ -53,6 +53,7 @@ export class BabyDto implements Baby {
   birth_place?: string;
   created_at: Date;
   updated_at: Date;
+  gender: BabyGender;
 }
 
 export class RoleAuthorityDto implements RoleAuthority {
