@@ -1,7 +1,15 @@
-import { BabyTimelineType, DiaperType } from '../enums';
+import { BabyBottleUnitType, BabyTimelineType } from '../enums';
+
+export type BabyTimelinePagination = {
+  available_days: string[];
+  current_day: string;
+  previous_day: string | null;
+  next_day: string | null;
+};
 
 export type BabyTimeline = {
-  entries: BabyTimelineEntry[];
+  resources: BabyTimelineEntry[];
+  pagination?: BabyTimelinePagination;
 };
 
 export type BabyTimelineEntry = {
@@ -19,9 +27,16 @@ export type Breastfeeding = {
   right: boolean;
 };
 
+export type BabyBottleUnit = keyof typeof BabyBottleUnitType;
+
+export type BabyBottle = {
+  quantity: number;
+  unit: BabyBottleUnit;
+  note?: string;
+};
+
 export type Meal = {
-  breast: Breastfeeding;
-  quantity: string;
+  meal: string;
   note?: string;
 };
 
@@ -31,7 +46,8 @@ export type Activity = {
 };
 
 export type Diaper = {
-  type: DiaperType;
+  pee: boolean;
+  poop: boolean;
   note?: string;
 };
 
@@ -52,6 +68,7 @@ export type Note = {
 
 export type GetTimelineQuery = {
   day?: string;
+  order?: 'asc' | 'desc';
   type?: BabyTimelineType;
   userId?: string;
 };
@@ -59,5 +76,5 @@ export type GetTimelineQuery = {
 export type AddOrUpdateTimelineEntry = {
   type: BabyTimelineType;
   details: unknown;
-  occurredAt: Date;
+  occurredAt: string;
 };

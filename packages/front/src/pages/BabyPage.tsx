@@ -1,4 +1,5 @@
 import {
+  AppBar,
   BottomNavigation,
   BottomNavigationAction,
   CircularProgress,
@@ -14,12 +15,15 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import FaceIcon from '@mui/icons-material/Face';
+import Face2Icon from '@mui/icons-material/Face2';
 import { BabyTimeline } from '../components/baby/BabyTimeline';
 import { BabyRelation } from '../components/baby/BabyRelation';
 import { BabySettings } from '../components/baby/BabySettings';
 import { RootState } from '../core';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetCurrentBaby, setCurrentBaby } from '../core/store/features';
+import { theme } from '../theme';
 
 const mapState = (state: RootState) => ({ babies: state.baby.babies, currentBaby: state.baby.currentBaby });
 
@@ -59,7 +63,6 @@ export const BabyPage = () => {
   if (!currentBaby) {
     return (
       <Container
-        component="main"
         sx={{
           mt: 2,
           display: 'flex',
@@ -75,33 +78,48 @@ export const BabyPage = () => {
   }
 
   return (
-    <div>
-      <Paper elevation={3} sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
-        <Tabs
-          value={babyId}
-          variant="scrollable"
-          scrollButtons="auto"
-          allowScrollButtonsMobile
-          aria-label="visible arrows tabs example"
-          sx={{
-            [`& .${tabsClasses.scrollButtons}`]: {
-              '&.Mui-disabled': { opacity: 0.3 },
-            },
-          }}
-        >
-          <Tab icon={<PersonAddIcon />} iconPosition="start" onClick={() => navigate('/register-baby')} />
+    <>
+      <AppBar
+        position="sticky"
+        component="nav"
+        sx={{
+          [theme.breakpoints.down('sm')]: {
+            top: '56px',
+          },
+          [theme.breakpoints.up('sm')]: {
+            top: '64px',
+          },
+        }}
+      >
+        <Paper elevation={3} sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
+          <Tabs
+            value={babyId}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            aria-label="visible arrows tabs example"
+            sx={{
+              [`& .${tabsClasses.scrollButtons}`]: {
+                '&.Mui-disabled': { opacity: 0.3 },
+              },
+            }}
+          >
+            <Tab icon={<PersonAddIcon />} iconPosition="start" onClick={() => navigate('/register-baby')} />
 
-          {(babies || []).map((baby) => (
-            <Tab
-              key={baby.id}
-              label={`${baby.firstname} ${baby.lastname[0]}`}
-              value={baby.id}
-              onClick={() => navigate(`/baby/${baby.id}`)}
-            />
-          ))}
-        </Tabs>
-      </Paper>
-      <Container component="main" maxWidth="xs" sx={{ mt: 2 }}>
+            {(babies || []).map((baby) => (
+              <Tab
+                key={baby.id}
+                label={`${baby.firstname} ${baby.lastname[0]}`}
+                icon={baby.gender === 'BOY' ? <FaceIcon /> : <Face2Icon />}
+                iconPosition="start"
+                value={baby.id}
+                onClick={() => navigate(`/baby/${baby.id}`)}
+              />
+            ))}
+          </Tabs>
+        </Paper>
+      </AppBar>
+      <Container component="section" maxWidth="xs" sx={{ mt: 2, mb: '56px' }}>
         <Routes>
           <Route path="timeline" element={<BabyTimeline baby={currentBaby} />} />
           <Route path="relations" element={<BabyRelation baby={currentBaby} />} />
@@ -109,13 +127,13 @@ export const BabyPage = () => {
           <Route path="*" element={<Navigate replace to="timeline" />} />
         </Routes>
       </Container>
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3} component="nav">
         <BottomNavigation value={currentNavigation} onChange={handleChange}>
           <BottomNavigationAction label="Timeline" value="timeline" icon={<RestoreIcon />} />
           <BottomNavigationAction label="Relations" value="relations" icon={<EscalatorWarningIcon />} />
           <BottomNavigationAction label="Settings" value="settings" icon={<SettingsIcon />} />
         </BottomNavigation>
       </Paper>
-    </div>
+    </>
   );
 };

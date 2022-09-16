@@ -26,7 +26,7 @@ export const authSlice = createSlice({
     setUser: (state, action: PayloadAction<AuthState['user']>) => {
       state.user = action.payload;
     },
-    logout: (state) => {
+    resetAuthState: (state) => {
       authService.removeAccessToken();
       state.user = undefined;
       state.token = undefined;
@@ -34,4 +34,4 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setToken, setUser, logout } = authSlice.actions;
+export const { setToken, setUser, resetAuthState } = authSlice.actions;

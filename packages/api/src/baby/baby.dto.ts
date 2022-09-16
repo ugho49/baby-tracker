@@ -5,36 +5,38 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
   validate,
   ValidateBy,
-  ValidateIf,
-  ValidateNested,
   ValidationArguments,
 } from 'class-validator';
-import { plainToInstance, Type } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import {
   Activity,
   AddBabyRelation,
   AddOrUpdateTimelineEntry,
   Baby,
   BabyAuthority,
+  BabyBottle,
+  BabyBottleUnit,
+  BabyBottleUnitType,
   BabyGender,
   BabyRelation,
   BabyRelationId,
   BabyRole,
   BabyTimeline,
   BabyTimelineEntry,
+  BabyTimelinePagination,
   BabyTimelineType,
   BabyTimelineTypeDetail,
   BabyWithRelations,
   BabyWithUserAuthority,
   Breastfeeding,
   Diaper,
-  DiaperType,
   GetTimelineQuery,
   Meal,
   Medicine,
@@ -95,7 +97,7 @@ export class UpdateBabyDto implements UpdateBaby {
 
   @IsNotEmpty()
   @IsDateString()
-  birth_date: Date;
+  birth_date: string;
 
   @IsString()
   @MaxLength(100)
@@ -137,7 +139,8 @@ export class UpdateBabyRelationDto implements UpdateBabyRelation {
 }
 
 export class BabyTimelineDto implements BabyTimeline {
-  entries: BabyTimelineEntryDto[];
+  resources: BabyTimelineEntryDto[];
+  pagination?: BabyTimelinePaginationDto;
 }
 
 export class BabyTimelineEntryDto implements BabyTimelineEntry {
@@ -150,6 +153,13 @@ export class BabyTimelineEntryDto implements BabyTimelineEntry {
   updated_at: string;
 }
 
+export class BabyTimelinePaginationDto implements BabyTimelinePagination {
+  available_days: string[];
+  current_day: string;
+  previous_day: string | null;
+  next_day: string | null;
+}
+
 export class BreastfeedingDto implements Breastfeeding {
   @IsBoolean()
   left: boolean;
@@ -159,14 +169,21 @@ export class BreastfeedingDto implements Breastfeeding {
 }
 
 export class MealDto implements Meal {
-  @ValidateNested()
-  @ValidateIf((o) => o.quantity === undefined || o.breast)
-  @Type(() => BreastfeedingDto)
-  breast: BreastfeedingDto;
+  @IsString()
+  meal: string;
 
   @IsString()
-  @ValidateIf((o) => o.breast === undefined || o.quantity)
-  quantity: string;
+  @IsOptional()
+  note?: string;
+}
+
+export class BabyBottleDto implements BabyBottle {
+  @IsNumber()
+  quantity: number;
+
+  @IsString()
+  @IsEnum(BabyBottleUnitType)
+  unit: BabyBottleUnit;
 
   @IsString()
   @IsOptional()
@@ -183,8 +200,11 @@ export class ActivityDto implements Activity {
 }
 
 export class DiaperDto implements Diaper {
-  @IsEnum(DiaperType)
-  type: DiaperType;
+  @IsBoolean()
+  pee: boolean;
+
+  @IsBoolean()
+  poop: boolean;
 
   @IsString()
   @IsOptional()
@@ -220,6 +240,8 @@ export class NoteDto implements Note {
 
 export const BabyTimelineDetailsDtos: BabyTimelineTypeDetail = {
   MEAL: MealDto,
+  BREASTFEEDING: BreastfeedingDto,
+  BABY_BOTTLE: BabyBottleDto,
   ACTIVITY: ActivityDto,
   DIAPER: DiaperDto,
   MEDICINE: MedicineDto,
@@ -228,7 +250,7 @@ export const BabyTimelineDetailsDtos: BabyTimelineTypeDetail = {
 };
 
 export class GetTimelineQueryDto implements GetTimelineQuery {
-  @IsString()
+  @IsDateString()
   @IsOptional()
   day?: string;
 
@@ -239,6 +261,9 @@ export class GetTimelineQueryDto implements GetTimelineQuery {
   @IsString()
   @IsOptional()
   userId?: string;
+
+  @IsString()
+  order: 'asc' | 'desc' = 'asc';
 }
 
 export class AddOrUpdateTimelineEntryDto implements AddOrUpdateTimelineEntry {
@@ -267,5 +292,5 @@ export class AddOrUpdateTimelineEntryDto implements AddOrUpdateTimelineEntry {
 
   @IsNotEmpty()
   @IsDateString()
-  occurredAt: Date;
+  occurredAt: string;
 }

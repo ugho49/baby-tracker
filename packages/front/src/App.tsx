@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useApi } from '@baby-tracker/common-front';
 import { babyTrackerApiRef, RootState } from './core';
 import { useEffect } from 'react';
-import { setBabies, setUser } from './core/store/features';
+import { setBabies, setLoadBabies, setUser } from './core/store/features';
 import { Navbar } from './components/Navbar';
 import { BabyPage } from './pages/BabyPage';
 import { RegisterBabyPage } from './pages/RegisterBabyPage';
@@ -30,10 +30,24 @@ const AnonymousRouteContainerOutlet = () => (
 );
 
 const PrivateRouteContainerOutlet = () => (
-  <div style={{ backgroundColor: '#f5f5f5', height: '100vh' }}>
+  <>
+    <Box
+      id="backdrop"
+      sx={{
+        backgroundColor: '#f5f5f5',
+        position: 'fixed',
+        width: '100vw',
+        height: '100vh',
+        top: 0,
+        left: 0,
+        zIndex: -1,
+      }}
+    />
     <Navbar />
-    <Outlet />
-  </div>
+    <Box component="main">
+      <Outlet />
+    </Box>
+  </>
 );
 
 const mapState = (state: RootState) => ({ token: state.auth.token });
@@ -47,7 +61,11 @@ export const App = () => {
   useEffect(() => {
     if (isLoggedIn) {
       api.getUserInfos().then((res) => dispatch(setUser(res.data)));
-      api.getAllMyBabies().then((res) => dispatch(setBabies(res.data)));
+      dispatch(setLoadBabies(true));
+      api
+        .getAllMyBabies()
+        .then((res) => dispatch(setBabies(res.data)))
+        .finally(() => dispatch(setLoadBabies(false)));
     }
   }, [token]);
 
@@ -66,8 +84,7 @@ export const App = () => {
 
       {isLoggedIn && (
         <Route element={<PrivateRouteContainerOutlet />}>
-          <Route path="/" element={<Navigate replace to="home" />} />
-          <Route path="home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="profile" element={<UserProfilePage />} />
           <Route path="register-baby" element={<RegisterBabyPage />} />
           <Route path="baby/:babyId/*" element={<BabyPage />} />

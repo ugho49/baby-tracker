@@ -23,7 +23,7 @@ export const AxiosInterceptor: React.FC = () => {
   useInterval(() => {
     if (token && authService.tokenIsExpired(token)) {
       // TODO: TOAST "You have been disconnected"
-      dispatch(logout());
+      logout(dispatch);
       redirectToLogin();
     }
   }, 1000);

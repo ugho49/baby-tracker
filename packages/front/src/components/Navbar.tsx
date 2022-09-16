@@ -42,11 +42,11 @@ export const Navbar = () => {
   const handleLogout = () => {
     handleCloseUserMenu();
     // TODO: Toast "Hope to see you soon"
-    dispatch(logout());
+    logout(dispatch);
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
@@ -54,6 +54,7 @@ export const Navbar = () => {
             to="/"
             sx={{
               display: { xs: 'flex' },
+              alignItems: 'center',
               flexGrow: 0,
               fontFamily: 'monospace',
               fontWeight: 700,
@@ -62,9 +63,9 @@ export const Navbar = () => {
               textDecoration: 'none',
             }}
           >
-            <AdbIcon sx={{ mr: 1 }} />
+            <img style={{ margin: '10px', height: '2.2rem' }} src="/assets/logo.png" />
             <Typography variant="h5" noWrap>
-              LOGO
+              BABY TRACKER
             </Typography>
           </Box>
 

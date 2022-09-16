@@ -53,6 +53,7 @@ export const LoginPage = () => {
           name="email"
           autoComplete="email"
           autoFocus
+          value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
         <TextField
@@ -64,6 +65,7 @@ export const LoginPage = () => {
           type="password"
           id="password"
           autoComplete="current-password"
+          value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
         <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />

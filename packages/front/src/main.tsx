@@ -8,6 +8,8 @@ import { App } from './App';
 import { theme } from './theme';
 import { AxiosInterceptor } from './core/router/AxiosInterceptor';
 import './styles.scss';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -15,10 +17,12 @@ root.render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
-          <AxiosInterceptor />
-          <App />
-        </BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="fr">
+          <BrowserRouter>
+            <AxiosInterceptor />
+            <App />
+          </BrowserRouter>
+        </LocalizationProvider>
       </ThemeProvider>
     </Provider>
   </ApiProvider>

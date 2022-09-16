@@ -23,8 +23,9 @@ import {
 } from './baby.dto';
 import { UserService } from '../user/user.service';
 import { uniq } from 'lodash';
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
-import { BabyAuthority, BabyRole } from '@baby-tracker/common-types';
+import { BabyAuthority, BabyRole, BabyTimelinePagination } from '@baby-tracker/common-types';
+import { DateTime } from 'luxon';
+import { getNextDay, getPreviousDay } from './baby.utils';
 
 @Injectable()
 export class BabyService {
@@ -46,7 +47,7 @@ export class BabyService {
       firstname: dto.firstname,
       lastname: dto.lastname,
       gender: dto.gender,
-      birthDate: dto.birth_date,
+      birthDate: new Date(dto.birth_date),
       birthPlace: dto.birth_place,
     });
 
@@ -77,7 +78,7 @@ export class BabyService {
     entity.firstname = dto.firstname;
     entity.lastname = dto.lastname;
     entity.gender = dto.gender;
-    entity.birthDate = dto.birth_date;
+    entity.birthDate = new Date(dto.birth_date);
     entity.birthPlace = dto.birth_place;
 
     await this.babyRepository.update({ id: babyId }, entity);
@@ -215,22 +216,53 @@ export class BabyService {
   async getTimeline(param: { babyId: string; queryParams: GetTimelineQueryDto }): Promise<BabyTimelineDto> {
     const { babyId, queryParams } = param;
 
-    let where: FindOptionsWhere<BabyTimelineEntity> = { babyId };
+    const countOrder = queryParams.order === 'asc' ? 'DESC' : 'ASC';
+    const countQuery = this.timelineRepository
+      .createQueryBuilder('bt')
+      .select(['DISTINCT bt.occurred_at::date'])
+      .where({ babyId })
+      .addOrderBy('occurred_at', countOrder);
+
+    const days = await countQuery
+      .getRawMany<{ occurred_at: string }>()
+      .then((res) => res.map((r) => DateTime.fromJSDate(new Date(r.occurred_at)).toISODate()));
+
+    if (days.length === 0) {
+      return { resources: [] };
+    }
+
+    const currentDay = queryParams.day ? DateTime.fromISO(queryParams.day) : DateTime.fromISO(days[0]);
+    const currentDayString = currentDay.toISODate();
+
+    const query = this.timelineRepository
+      .createQueryBuilder('bt')
+      .where({ babyId })
+      .andWhere('cast(bt.occurredAt as date) = cast(:day as date)')
+      .setParameter('day', currentDayString);
 
     if (queryParams.userId) {
-      where = { ...where, achieveBy: queryParams.userId };
+      query.andWhere({ achieveBy: queryParams.userId });
     }
 
     if (queryParams.type) {
-      where = { ...where, type: queryParams.type };
+      query.andWhere({ type: queryParams.type });
     }
 
-    // TODO: handle day query param
+    const order = queryParams.order === 'asc' ? 'ASC' : 'DESC';
+    query.addOrderBy('bt.occurredAt', order);
 
-    return this.timelineRepository
-      .findBy(where)
-      .then((entities) => entities.map((entity) => entity.toDto()))
-      .then((entries) => ({ entries }));
+    const list = await query.getMany();
+
+    const entries = list.map((entity) => entity.toDto());
+
+    const pagination: BabyTimelinePagination = {
+      available_days: days.reverse(),
+      current_day: currentDayString,
+      previous_day: getPreviousDay(currentDayString, days),
+      next_day: getNextDay(currentDayString, days),
+    };
+
+    return { resources: entries, pagination };
   }
 
   async createTimelineEntry(param: {
@@ -242,7 +274,7 @@ export class BabyService {
     const entity = BabyTimelineEntity.create({
       babyId,
       type: dto.type,
-      occurredAt: dto.occurredAt,
+      occurredAt: new Date(dto.occurredAt),
       details: dto.details,
       achieveBy: userId,
     });
@@ -267,7 +299,7 @@ export class BabyService {
 
     entity.type = dto.type;
     entity.details = dto.details;
-    entity.occurredAt = dto.occurredAt;
+    entity.occurredAt = new Date(dto.occurredAt);
 
     await this.timelineRepository.update({ id: timelineId, babyId }, entity);
 

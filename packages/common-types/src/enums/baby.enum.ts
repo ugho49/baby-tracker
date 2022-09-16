@@ -24,6 +24,8 @@ export enum BabyGender {
 
 export enum BabyTimelineType {
   MEAL = 'MEAL',
+  BREASTFEEDING = 'BREASTFEEDING',
+  BABY_BOTTLE = 'BABY_BOTTLE',
   ACTIVITY = 'ACTIVITY',
   DIAPER = 'DIAPER',
   MEDICINE = 'MEDICINE',
@@ -31,7 +33,7 @@ export enum BabyTimelineType {
   NAP = 'NAP',
 }
 
-export enum DiaperType {
-  'POOP' = 'POOP',
-  'PEE' = 'PEE',
+export enum BabyBottleUnitType {
+  ml = 'ml',
+  oz = 'oz',
 }

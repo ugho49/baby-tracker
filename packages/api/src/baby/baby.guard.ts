@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { BabyAuthority, BabyAuthorityTypes } from '@baby-tracker/common-types';
+import { BabyAuthority, parentAuthorityGraph } from '@baby-tracker/common-types';
 import { uniq } from 'lodash';
 import { IAuthUser } from '../auth';
 import { BabyService } from './baby.service';
@@ -19,12 +19,6 @@ const metadataKey = 'authority';
 type MetadataParamType = {
   authorities: BabyAuthority[];
   idParamName: string;
-};
-
-const parentAuthorityGraph: { [key in BabyAuthorityTypes]: BabyAuthority[] } = {
-  ROLE_ADMIN: [],
-  ROLE_WRITE_USER: [BabyAuthority.ROLE_ADMIN],
-  ROLE_READ_USER: [BabyAuthority.ROLE_ADMIN, BabyAuthority.ROLE_WRITE_USER],
 };
 
 @Injectable()
