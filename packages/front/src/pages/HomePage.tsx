@@ -8,7 +8,6 @@ import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import { BabyGender } from '@baby-tracker/common-types';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { RouterLink } from '@baby-tracker/common-front';
 
 const mapState = (state: RootState) => ({ babies: state.baby.babies });
 
