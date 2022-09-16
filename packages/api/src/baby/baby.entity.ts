@@ -8,7 +8,7 @@ import {
   BabyTimelineType,
   BabyTimelineTypeTypes,
 } from '@baby-tracker/common-types';
-import { BabyDto, BabyTimelineDto } from './baby.dto';
+import { BabyDto, BabyTimelineEntryDto } from './baby.dto';
 
 @Entity('baby')
 export class BabyEntity extends TimestampEntity {
@@ -51,11 +51,11 @@ export class BabyEntity extends TimestampEntity {
       id: this.id,
       firstname: this.firstname,
       lastname: this.lastname,
-      birth_date: this.birthDate,
+      birth_date: this.birthDate.toISOString(),
       birth_place: this.birthPlace,
       gender: BabyGender[this.gender],
-      created_at: this.createdAt,
-      updated_at: this.updatedAt,
+      created_at: this.createdAt.toISOString(),
+      updated_at: this.updatedAt.toISOString(),
     };
   }
 }
@@ -128,15 +128,15 @@ export class BabyTimelineEntity extends TimestampEntity {
     return entity;
   }
 
-  toDto(): BabyTimelineDto {
+  toDto(): BabyTimelineEntryDto {
     return {
       id: this.id,
       details: this.details,
       type: BabyTimelineType[this.type],
-      occurred_at: this.occurredAt,
+      occurred_at: this.occurredAt.toISOString(),
       achieve_by: this.achieveBy,
-      created_at: this.createdAt,
-      updated_at: this.updatedAt,
+      created_at: this.createdAt.toISOString(),
+      updated_at: this.updatedAt.toISOString(),
     };
   }
 }

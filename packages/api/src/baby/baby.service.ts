@@ -13,6 +13,7 @@ import {
   AddOrUpdateTimelineEntryDto,
   BabyDto,
   BabyTimelineDto,
+  BabyTimelineEntryDto,
   BabyWithRelationsDto,
   BabyWithUserAuthorityDto,
   GetTimelineQueryDto,
@@ -211,7 +212,7 @@ export class BabyService {
     await this.relationRepository.delete({ id: relationId });
   }
 
-  async getTimeline(param: { babyId: string; queryParams: GetTimelineQueryDto }): Promise<BabyTimelineDto[]> {
+  async getTimeline(param: { babyId: string; queryParams: GetTimelineQueryDto }): Promise<BabyTimelineDto> {
     const { babyId, queryParams } = param;
 
     let where: FindOptionsWhere<BabyTimelineEntity> = { babyId };
@@ -226,14 +227,17 @@ export class BabyService {
 
     // TODO: handle day query param
 
-    return this.timelineRepository.findBy(where).then((entities) => entities.map((entity) => entity.toDto()));
+    return this.timelineRepository
+      .findBy(where)
+      .then((entities) => entities.map((entity) => entity.toDto()))
+      .then((entries) => ({ entries }));
   }
 
   async createTimelineEntry(param: {
     babyId: string;
     userId: string;
     dto: AddOrUpdateTimelineEntryDto;
-  }): Promise<BabyTimelineDto> {
+  }): Promise<BabyTimelineEntryDto> {
     const { babyId, dto, userId } = param;
     const entity = BabyTimelineEntity.create({
       babyId,
@@ -252,7 +256,7 @@ export class BabyService {
     babyId: string;
     timelineId: string;
     dto: AddOrUpdateTimelineEntryDto;
-  }): Promise<BabyTimelineDto> {
+  }): Promise<BabyTimelineEntryDto> {
     const { babyId, dto, timelineId } = param;
 
     const entity = await this.timelineRepository.findOneBy({ id: timelineId, babyId });

@@ -18,18 +18,19 @@ import { BabyTimeline } from '../components/baby/BabyTimeline';
 import { BabyRelation } from '../components/baby/BabyRelation';
 import { BabySettings } from '../components/baby/BabySettings';
 import { RootState } from '../core';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetCurrentBaby, setCurrentBaby } from '../core/store/features';
 
-const mapState = (state: RootState) => ({ babies: state.baby.babies });
+const mapState = (state: RootState) => ({ babies: state.baby.babies, currentBaby: state.baby.currentBaby });
 
 export const BabyPage = () => {
   const { babyId } = useParams();
-  const { babies } = useSelector(mapState);
+  const { babies, currentBaby } = useSelector(mapState);
   const basePath = useMemo(() => `/baby/${babyId}`, [babyId]);
   const [currentNavigation, setCurrentNavigation] = useState('');
-  const currentBaby = useMemo(() => babies?.find((baby) => baby.id === babyId), [babyId, babies]);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     navigate(`${basePath}/${newValue}`);
@@ -41,6 +42,19 @@ export const BabyPage = () => {
     const nestedPath = pathname.replace(basePath, '').replace('/', '');
     setCurrentNavigation(nestedPath);
   }, [location, basePath]);
+
+  useEffect(() => {
+    const currentBaby = babies?.find((baby) => baby.id === babyId);
+    if (currentBaby) {
+      dispatch(setCurrentBaby(currentBaby));
+    }
+  }, [babyId, babies]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetCurrentBaby());
+    };
+  }, []);
 
   if (!currentBaby) {
     return (
@@ -62,7 +76,7 @@ export const BabyPage = () => {
 
   return (
     <div>
-      <Paper elevation={3}>
+      <Paper elevation={3} sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
         <Tabs
           value={babyId}
           variant="scrollable"

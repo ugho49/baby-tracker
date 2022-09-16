@@ -8,6 +8,7 @@ import {
   BabyDto,
   BabyRelationIdDto,
   BabyTimelineDto,
+  BabyTimelineEntryDto,
   BabyWithRelationsDto,
   BabyWithUserAuthorityDto,
   GetTimelineQueryDto,
@@ -97,7 +98,7 @@ export class BabyController {
   async getTimeline(
     @Param('babyId') babyId: string,
     @Query() queryParams: GetTimelineQueryDto
-  ): Promise<BabyTimelineDto[]> {
+  ): Promise<BabyTimelineDto> {
     return this.babyService.getTimeline({ babyId, queryParams });
   }
 
@@ -108,7 +109,7 @@ export class BabyController {
     @Param('babyId') babyId: string,
     @AuthUser('userId') userId: string,
     @Body() dto: AddOrUpdateTimelineEntryDto
-  ): Promise<BabyTimelineDto> {
+  ): Promise<BabyTimelineEntryDto> {
     return this.babyService.createTimelineEntry({ babyId, userId, dto });
   }
 
@@ -119,7 +120,7 @@ export class BabyController {
     @Param('babyId') babyId: string,
     @Param('timelineId') timelineId: string,
     @Body() dto: AddOrUpdateTimelineEntryDto
-  ): Promise<BabyTimelineDto> {
+  ): Promise<BabyTimelineEntryDto> {
     return this.babyService.updateTimelineEntry({ timelineId, babyId, dto });
   }
 

@@ -1,13 +1,17 @@
 import { BabyTimelineType, DiaperType } from '../enums';
 
 export type BabyTimeline = {
+  entries: BabyTimelineEntry[];
+};
+
+export type BabyTimelineEntry = {
   id: string;
   type: BabyTimelineType;
   details: unknown;
   achieve_by: string;
-  occurred_at: Date;
-  created_at: Date;
-  updated_at: Date;
+  occurred_at: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export type Breastfeeding = {

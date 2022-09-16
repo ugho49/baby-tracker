@@ -27,6 +27,7 @@ import {
   BabyRelationId,
   BabyRole,
   BabyTimeline,
+  BabyTimelineEntry,
   BabyTimelineType,
   BabyTimelineTypeDetail,
   BabyWithRelations,
@@ -49,10 +50,10 @@ export class BabyDto implements Baby {
   id: string;
   firstname: string;
   lastname: string;
-  birth_date: Date;
+  birth_date: string;
   birth_place?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   gender: BabyGender;
 }
 
@@ -136,13 +137,17 @@ export class UpdateBabyRelationDto implements UpdateBabyRelation {
 }
 
 export class BabyTimelineDto implements BabyTimeline {
+  entries: BabyTimelineEntryDto[];
+}
+
+export class BabyTimelineEntryDto implements BabyTimelineEntry {
   id: string;
   type: BabyTimelineType;
   details: unknown;
   achieve_by: string;
-  occurred_at: Date;
-  created_at: Date;
-  updated_at: Date;
+  occurred_at: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export class BreastfeedingDto implements Breastfeeding {

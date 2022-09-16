@@ -37,8 +37,8 @@ export class UserEntity extends TimestampEntity {
       firstname: this.firstname,
       lastname: this.lastname,
       email: this.email,
-      created_at: this.createdAt,
-      updated_at: this.updatedAt,
+      created_at: this.createdAt.toISOString(),
+      updated_at: this.updatedAt.toISOString(),
     };
   }
 }

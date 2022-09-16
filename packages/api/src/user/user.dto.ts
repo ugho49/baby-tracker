@@ -6,8 +6,8 @@ export class UserDto implements User {
   firstname: string;
   lastname: string;
   email: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export class RegisterUserDto implements RegisterUser {

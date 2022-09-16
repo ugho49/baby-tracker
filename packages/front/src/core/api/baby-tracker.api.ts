@@ -6,6 +6,7 @@ import {
   Baby,
   BabyRelationId,
   BabyTimeline,
+  BabyTimelineEntry,
   BabyTrackerApi,
   BabyWithRelations,
   BabyWithUserAuthority,
@@ -38,7 +39,7 @@ export class BabyTrackerApiImpl implements BabyTrackerApi {
     return this.instance.post(`/baby/${babyId}/relation`, data);
   }
 
-  addBabyTimeline(babyId: string, data: AddOrUpdateTimelineEntry): AxiosPromise<BabyTimeline> {
+  addBabyTimeline(babyId: string, data: AddOrUpdateTimelineEntry): AxiosPromise<BabyTimelineEntry> {
     return this.instance.post(`/baby/${babyId}/timeline`, data);
   }
 
@@ -62,7 +63,7 @@ export class BabyTrackerApiImpl implements BabyTrackerApi {
     return this.instance.get(`/baby/${babyId}`);
   }
 
-  getBabyTimeline(babyId: string, params: GetTimelineQuery): AxiosPromise<BabyTimeline[]> {
+  getBabyTimeline(babyId: string, params: GetTimelineQuery): AxiosPromise<BabyTimeline> {
     return this.instance.get(`/baby/${babyId}/timeline`, { params });
   }
 
@@ -90,7 +91,11 @@ export class BabyTrackerApiImpl implements BabyTrackerApi {
     return this.instance.patch(`/baby/${babyId}/relation/${relationId}`, data);
   }
 
-  updateBabyTimeline(babyId: string, timelineId: string, data: AddOrUpdateTimelineEntry): AxiosPromise<BabyTimeline> {
+  updateBabyTimeline(
+    babyId: string,
+    timelineId: string,
+    data: AddOrUpdateTimelineEntry
+  ): AxiosPromise<BabyTimelineEntry> {
     return this.instance.put(`/baby/${babyId}/timeline/${timelineId}`, data);
   }
 }
