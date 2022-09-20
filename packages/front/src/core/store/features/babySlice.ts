@@ -48,6 +48,16 @@ export const babySlice = createSlice({
         state.currentBaby.timelineEntries.push(action.payload);
       }
     },
+    editTimelineEntry: (state, action: PayloadAction<BabyTimelineEntry>) => {
+      if (!state?.currentBaby?.timelineEntries) {
+        return;
+      }
+      const index = state.currentBaby.timelineEntries.findIndex((entry) => entry.id === action.payload.id);
+      if (index === -1) {
+        return;
+      }
+      state.currentBaby.timelineEntries[index] = action.payload;
+    },
     resetCurrentBaby: (state) => {
       state.currentBaby = undefined;
     },
@@ -64,6 +74,7 @@ export const {
   setCurrentBaby,
   setTimeline,
   addTimelineEntry,
+  editTimelineEntry,
   resetCurrentBaby,
   resetBabyState,
   timelineRefreshed,

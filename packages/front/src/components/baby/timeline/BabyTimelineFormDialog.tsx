@@ -26,7 +26,7 @@ import { useApi } from '@baby-tracker/common-front';
 import { babyTrackerApiRef } from '../../../core';
 import { BabyTimelineTypeForm } from './BabyTimelineComponentForms';
 import { useDispatch } from 'react-redux';
-import { addTimelineEntry } from '../../../core/store/features';
+import { addTimelineEntry, editTimelineEntry } from '../../../core/store/features';
 
 const Transition = forwardRef((props: TransitionProps & { children: React.ReactElement }, ref: React.Ref<unknown>) => {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -83,7 +83,6 @@ export const BabyTimelineFormDialog = ({ babyId, open, handleClose, mode, editSt
   const dispatch = useDispatch();
 
   const resetForm = () => {
-    setLoading(false);
     setTimelineType(undefined);
     setOccurredAt(DateTime.now());
     setTypeFormState(undefined);
@@ -109,12 +108,19 @@ export const BabyTimelineFormDialog = ({ babyId, open, handleClose, mode, editSt
       }
 
       if (mode === 'edit') {
-        // TODO: handle edit
+        const { data } = await api.updateBabyTimeline(babyId, editState.id, {
+          type: timelineType,
+          details: typeFormState,
+          occurredAt: occurredAt.toISO(),
+        });
+        dispatch(editTimelineEntry(data));
       }
 
       handleClose();
     } catch (e) {
       console.error(e); // TODO handle error properly
+    } finally {
+      setLoading(false);
     }
   };
 
