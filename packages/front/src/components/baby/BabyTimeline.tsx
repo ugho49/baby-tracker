@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BabyWithUserAuthority } from '@baby-tracker/common-types';
-import { Fab } from '@mui/material';
+import { Box, Chip, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { BabyTimelineFormDialog } from './timeline/BabyTimelineFormDialog';
 import { babyTrackerApiRef, RootState } from '../../core';
@@ -12,21 +12,36 @@ import { DateTime } from 'luxon';
 import Timeline from '@mui/lab/Timeline';
 import { timelineContentClasses, timelineOppositeContentClasses } from '@mui/lab';
 import { BabyTimelineEntry } from './timeline/BabyTimelineEntry';
+import TodayIcon from '@mui/icons-material/Today';
 
 const REFRESH_THRESHOLD_SECONDS = 5 * 60; // 5 minutes
+
+const sortOccurredDateAsc = (a: any, b: any): number => {
+  const [dayA] = a;
+  const [dayB] = b;
+  return DateTime.fromISO(dayA).toMillis() - DateTime.fromISO(dayB).toMillis();
+};
+
+const sortOccurredDateDesc = (a: any, b: any): number => {
+  const [dayA] = a;
+  const [dayB] = b;
+  return DateTime.fromISO(dayB).toMillis() - DateTime.fromISO(dayA).toMillis();
+};
 
 export type BabyTimelineProps = {
   baby: BabyWithUserAuthority;
 };
 
 const mapState = (state: RootState) => ({
-  timelineEntries: state.baby.currentBaby?.timelineEntries || [],
+  timelineEntries: state.baby.currentBaby?.timelineEntries || {},
+  loadedDays: state.baby.currentBaby?.timelineLoadedDays || [],
+  availableDays: state.baby.currentBaby?.timelineAvailableDays || [],
   refreshAt: state.baby.currentBaby?.timelineRefreshAt,
 });
 
 export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
   const [timelineFormDialogOpen, setTimelineFormDialogOpen] = useState(false);
-  const { timelineEntries, refreshAt } = useSelector(mapState);
+  const { timelineEntries, refreshAt, loadedDays, availableDays } = useSelector(mapState);
   const dispatch = useDispatch();
   const api = useApi(babyTrackerApiRef);
 
@@ -37,11 +52,7 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
       return;
     }
     try {
-      const { data } = await api.getBabyTimeline(baby.id, {
-        // type: BabyTimelineType.NOTE,
-        // order: 'asc',
-        // day: DateTime.now().minus({ day: 3 }).toISODate(),
-      });
+      const { data } = await api.getBabyTimeline(baby.id, {});
       dispatch(setTimeline(data));
     } catch (e) {
       dispatch(timelineRefreshed());
@@ -51,12 +62,26 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
   useInterval(() => fetchTimeline(), 1_000);
 
   useEffect(() => {
-    fetchTimeline();
+    fetchTimeline().then(() => window.scrollTo({ left: 0, top: document.body.scrollHeight }));
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
-  }, [timelineEntries]);
+  const previousDay = useMemo(() => {
+    if (loadedDays.length === availableDays.length) {
+      return undefined;
+    }
+    return availableDays.filter((d) => !loadedDays.includes(d))[0];
+  }, [loadedDays, availableDays]);
+
+  const loadPrevious = useCallback(async () => {
+    try {
+      const { data } = await api.getBabyTimeline(baby.id, {
+        day: previousDay,
+      });
+      dispatch(setTimeline(data));
+    } catch (e) {
+      console.error(e); // TODO: handle error
+    }
+  }, [previousDay]);
 
   return (
     <>
@@ -77,16 +102,41 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
           },
         }}
       >
-        {timelineEntries.map((entry, i, entries) => (
-          <BabyTimelineEntry
-            key={entry.id}
-            babyId={baby.id}
-            authority={baby.relation.authority}
-            entry={entry}
-            first={i === 0}
-            last={i + 1 === entries.length}
-          />
-        ))}
+        {previousDay && (
+          <div onClick={() => loadPrevious()}>
+            {/* TODO: add some style*/}
+            {`< load previous : ${previousDay} >`}
+            <br />
+            <br />
+          </div>
+        )}
+
+        {Object.entries(timelineEntries)
+          .sort(sortOccurredDateAsc)
+          .map(([day, entries]) => (
+            <React.Fragment key={day}>
+              <Box>
+                <Chip
+                  sx={{ fontWeight: 700, padding: '15px 5px' }}
+                  label={DateTime.fromISO(day).toLocaleString(DateTime.DATE_MED)}
+                  color="primary"
+                  variant="outlined"
+                  icon={<TodayIcon />}
+                  size="small"
+                />
+              </Box>
+              {entries.map((entry, i) => (
+                <BabyTimelineEntry
+                  key={entry.id}
+                  babyId={baby.id}
+                  authority={baby.relation.authority}
+                  entry={entry}
+                  first={i === 0}
+                  last={i + 1 === entries.length}
+                />
+              ))}
+            </React.Fragment>
+          ))}
       </Timeline>
 
       <Fab

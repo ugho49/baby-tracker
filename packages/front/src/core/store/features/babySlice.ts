@@ -6,9 +6,11 @@ export interface BabyState {
   loadBabies?: boolean;
   babies?: BabyWithUserAuthority[];
   currentBaby?: BabyWithUserAuthority & {
-    timelineEntries?: BabyTimelineEntry[];
+    timelineAvailableDays: string[];
+    timelineLoadedDays: string[];
+    timelineEntries: { [key in string]: BabyTimelineEntry[] };
     timelineRefreshAt?: string;
-    relations?: BabyRelation[];
+    relations: BabyRelation[];
     relationsRefreshAt?: string;
   };
 }
@@ -30,13 +32,32 @@ export const babySlice = createSlice({
       state.loadBabies = action.payload;
     },
     setCurrentBaby: (state, action: PayloadAction<BabyWithUserAuthority>) => {
-      state.currentBaby = action.payload;
+      state.currentBaby = {
+        ...action.payload,
+        timelineAvailableDays: [],
+        timelineLoadedDays: [],
+        timelineEntries: {},
+        relations: [],
+      };
     },
     setTimeline: (state, action: PayloadAction<BabyTimeline>) => {
-      if (state.currentBaby) {
-        state.currentBaby.timelineEntries = action.payload.resources;
-        state.currentBaby.timelineRefreshAt = DateTime.now().toISO();
+      if (!state.currentBaby) {
+        return;
       }
+
+      const { payload } = action;
+
+      if (payload.pagination) {
+        const day = payload.pagination.current_day;
+        state.currentBaby.timelineEntries[day] = payload.resources;
+        state.currentBaby.timelineAvailableDays = payload.pagination.available_days;
+
+        if (!state.currentBaby.timelineLoadedDays.includes(day)) {
+          state.currentBaby.timelineLoadedDays.push(day);
+        }
+      }
+
+      state.currentBaby.timelineRefreshAt = DateTime.now().toISO();
     },
     timelineRefreshed: (state) => {
       if (state.currentBaby) {
@@ -44,19 +65,48 @@ export const babySlice = createSlice({
       }
     },
     addTimelineEntry: (state, action: PayloadAction<BabyTimelineEntry>) => {
-      if (state?.currentBaby?.timelineEntries) {
-        state.currentBaby.timelineEntries.push(action.payload);
+      if (!state.currentBaby) {
+        return;
       }
+      const day = DateTime.fromISO(action.payload.occurred_at).toISODate();
+      if (!state.currentBaby.timelineLoadedDays.includes(day)) {
+        state.currentBaby.timelineLoadedDays.push(day);
+        state.currentBaby.timelineEntries[day] = [];
+      }
+      state.currentBaby.timelineEntries[day].push(action.payload);
     },
     editTimelineEntry: (state, action: PayloadAction<BabyTimelineEntry>) => {
       if (!state?.currentBaby?.timelineEntries) {
         return;
       }
-      const index = state.currentBaby.timelineEntries.findIndex((entry) => entry.id === action.payload.id);
-      if (index === -1) {
-        return;
-      }
-      state.currentBaby.timelineEntries[index] = action.payload;
+
+      const id = action.payload.id;
+      const editEntryDay = DateTime.fromISO(action.payload.occurred_at).toISODate();
+
+      Object.entries(state.currentBaby.timelineEntries).forEach(([day, timelineEntries]) => {
+        const index = timelineEntries.findIndex((entry) => entry.id === id);
+
+        if (index === -1) {
+          return;
+        }
+
+        if (!state?.currentBaby?.timelineEntries) {
+          return;
+        }
+
+        if (day === editEntryDay) {
+          state.currentBaby.timelineEntries[day][index] = action.payload;
+        } else {
+          state.currentBaby.timelineEntries[day] = state.currentBaby.timelineEntries[day].filter((e) => e.id !== id);
+
+          if (!state.currentBaby.timelineLoadedDays.includes(editEntryDay)) {
+            state.currentBaby.timelineLoadedDays.push(editEntryDay);
+            state.currentBaby.timelineEntries[editEntryDay] = [];
+          }
+
+          state.currentBaby.timelineEntries[editEntryDay].push(action.payload);
+        }
+      });
     },
     resetCurrentBaby: (state) => {
       state.currentBaby = undefined;

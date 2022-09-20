@@ -256,7 +256,7 @@ export class BabyService {
     const entries = list.map((entity) => entity.toDto());
 
     const pagination: BabyTimelinePagination = {
-      available_days: days.reverse(),
+      available_days: days,
       current_day: currentDayString,
       previous_day: getPreviousDay(currentDayString, days),
       next_day: getNextDay(currentDayString, days),

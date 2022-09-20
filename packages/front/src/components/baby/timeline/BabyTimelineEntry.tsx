@@ -53,7 +53,7 @@ export const BabyTimelineEntry = ({ babyId, authority, entry, first, last }: Bab
           <div style={{ fontWeight: 500 }}>
             {DateTime.fromISO(entry.occurred_at).toLocaleString(DateTime.TIME_SIMPLE)}
           </div>
-          <div style={{ fontWeight: 300 }}>{DateTime.fromISO(entry.occurred_at).toFormat('dd LLL')}</div>
+          {/*<div style={{ fontWeight: 300 }}>{DateTime.fromISO(entry.occurred_at).toFormat('dd LLL')}</div>*/}
         </TimelineOppositeContent>
         <TimelineSeparator>
           <TimelineConnector sx={first ? transparent : undefined} />
