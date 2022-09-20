@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BabyWithUserAuthority } from '@baby-tracker/common-types';
-import { Box, Chip, Fab } from '@mui/material';
+import { Box, Button, Chip, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { BabyTimelineFormDialog } from './timeline/BabyTimelineFormDialog';
 import { babyTrackerApiRef, RootState } from '../../core';
@@ -12,7 +12,7 @@ import { DateTime } from 'luxon';
 import Timeline from '@mui/lab/Timeline';
 import { timelineContentClasses, timelineOppositeContentClasses } from '@mui/lab';
 import { BabyTimelineEntry } from './timeline/BabyTimelineEntry';
-import TodayIcon from '@mui/icons-material/Today';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const REFRESH_THRESHOLD_SECONDS = 5 * 60; // 5 minutes
 
@@ -85,6 +85,19 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
 
   return (
     <>
+      {previousDay && (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            fullWidth
+            onClick={() => loadPrevious()}
+            variant="text"
+            sx={{ display: 'flex', flexDirection: 'column' }}
+          >
+            <KeyboardArrowUpIcon />
+            <span>Voir le jour précédent</span>
+          </Button>
+        </Box>
+      )}
       <Timeline
         sx={{
           padding: 0,
@@ -102,26 +115,16 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
           },
         }}
       >
-        {previousDay && (
-          <div onClick={() => loadPrevious()}>
-            {/* TODO: add some style*/}
-            {`< load previous : ${previousDay} >`}
-            <br />
-            <br />
-          </div>
-        )}
-
         {Object.entries(timelineEntries)
           .sort(sortOccurredDateAsc)
           .map(([day, entries]) => (
             <React.Fragment key={day}>
-              <Box>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Chip
-                  sx={{ fontWeight: 700, padding: '15px 5px' }}
+                  sx={{ margin: '10px', padding: '5px 60px' }}
                   label={DateTime.fromISO(day).toLocaleString(DateTime.DATE_MED)}
                   color="primary"
                   variant="outlined"
-                  icon={<TodayIcon />}
                   size="small"
                 />
               </Box>

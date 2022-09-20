@@ -39,6 +39,7 @@ export const BreastfeedingForm = ({
 
       <Stack sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center' }}>
         <ToggleButton
+          color="secondary"
           disabled={disabled}
           className={classes.button}
           value="left"
@@ -53,6 +54,7 @@ export const BreastfeedingForm = ({
           <div>Gauche</div>
         </ToggleButton>
         <ToggleButton
+          color="secondary"
           disabled={disabled}
           className={classes.button}
           value="right"

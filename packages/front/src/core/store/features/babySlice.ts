@@ -100,7 +100,6 @@ export const babySlice = createSlice({
           state.currentBaby.timelineEntries[day] = state.currentBaby.timelineEntries[day].filter((e) => e.id !== id);
 
           if (!state.currentBaby.timelineLoadedDays.includes(editEntryDay)) {
-            state.currentBaby.timelineLoadedDays.push(editEntryDay);
             state.currentBaby.timelineEntries[editEntryDay] = [];
           }
 

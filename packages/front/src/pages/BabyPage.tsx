@@ -119,7 +119,7 @@ export const BabyPage = () => {
           </Tabs>
         </Paper>
       </AppBar>
-      <Container component="section" maxWidth="xs" sx={{ mt: 2, mb: '56px' }}>
+      <Container component="section" maxWidth="xs" sx={{ mt: 2, mb: '80px' }}>
         <Routes>
           <Route path="timeline" element={<BabyTimeline baby={currentBaby} />} />
           <Route path="relations" element={<BabyRelation baby={currentBaby} />} />

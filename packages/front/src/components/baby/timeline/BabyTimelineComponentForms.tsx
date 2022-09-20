@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { BabyTimelineType } from '@baby-tracker/common-types';
 import { BabyBottleForm } from './types-form/BabyBottleForm';
 import { BreastfeedingForm } from './types-form/BreastfeedingForm';
+import { DiaperForm } from './types-form/DiaperForm';
 
 export type FormProps<T> = {
   initialState?: T;
@@ -25,7 +26,7 @@ export const BabyTimelineComponentForms: { [key in BabyTimelineType]: (props: Fo
     BABY_BOTTLE: BabyBottleForm,
     BREASTFEEDING: BreastfeedingForm,
     MEAL: (props) => <div>Meal form</div>, // TODO
-    DIAPER: (props) => <div>Diaper form</div>, // TODO
+    DIAPER: DiaperForm, // TODO
     MEDICINE: (props) => <div>Medicine form</div>, // TODO
     ACTIVITY: (props) => <div>Activity form</div>, // TODO
     NAP: (props) => <div>Nap form</div>, // TODO
