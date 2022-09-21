@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { TimestampEntity, uuid } from '../database';
+import { TimestampEntity, uuid } from '../../core/database';
 import {
   BabyAuthorityTypes,
   BabyGender,

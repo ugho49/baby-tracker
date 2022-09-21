@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { HealthCheck, HealthCheckService, TypeOrmHealthIndicator } from '@nestjs/terminus';
-import { Public } from '../auth';
+import { Public } from '../../domain/auth';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('health')

@@ -1,7 +1,7 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import dbConfig from './db.config';
+import dbConfig from './database.config';
 
 @Module({
   imports: [
@@ -14,4 +14,4 @@ import dbConfig from './db.config';
   ],
   providers: [Logger],
 })
-export class DbModule {}
+export class DatabaseModule {}

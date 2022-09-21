@@ -55,7 +55,7 @@
     "typeorm-generate-migration": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/api/src/database/migrations",
+        "cwd": "packages/api/src/core/database/migrations",
         "parallel": false,
         "command": "typeorm migration:create",
         "color": true
