@@ -25,11 +25,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetCurrentBaby, setCurrentBaby } from '../core/store/features';
 import { theme } from '../theme';
 
-const mapState = (state: RootState) => ({ babies: state.baby.babies, currentBaby: state.baby.currentBaby });
+const mapState = (state: RootState) => ({
+  babies: state.baby.babies,
+  currentBaby: state.baby.currentBaby,
+  loadBabies: state.baby.loadBabies,
+});
 
 export const BabyPage = () => {
   const { babyId } = useParams();
-  const { babies, currentBaby } = useSelector(mapState);
+  const { babies, loadBabies, currentBaby } = useSelector(mapState);
   const basePath = useMemo(() => `/baby/${babyId}`, [babyId]);
   const [currentNavigation, setCurrentNavigation] = useState('');
   const navigate = useNavigate();
@@ -48,11 +52,19 @@ export const BabyPage = () => {
   }, [location, basePath]);
 
   useEffect(() => {
-    const currentBaby = babies?.find((baby) => baby.id === babyId);
-    if (currentBaby) {
-      dispatch(setCurrentBaby(currentBaby));
+    if (loadBabies) {
+      return;
     }
-  }, [babyId, babies]);
+    if (!babies) {
+      return;
+    }
+    const currentBaby = babies.find((baby) => baby.id === babyId);
+    if (!currentBaby) {
+      navigate('/');
+      return;
+    }
+    dispatch(setCurrentBaby(currentBaby));
+  }, [loadBabies, babyId, babies]);
 
   useEffect(() => {
     return () => {
@@ -60,7 +72,7 @@ export const BabyPage = () => {
     };
   }, []);
 
-  if (!currentBaby) {
+  if (loadBabies || !currentBaby) {
     return (
       <Container
         sx={{

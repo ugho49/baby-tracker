@@ -79,7 +79,14 @@ export const BabyTimelineComponentDetails: { [key in BabyTimelineType]: Componen
     label: 'Sieste',
     icon: <HotelIcon />,
     color: '#3d588d',
-    computeDescription: (details: Nap) => `Durée ${details.duration_minutes} min`, // TODO: transform min to hour depending of duration
+    computeDescription: (details: Nap) => {
+      const hours = details.duration_minutes / 60;
+      const rhours = Math.floor(hours);
+      const minutes = (hours - rhours) * 60;
+      const rminutes = Math.round(minutes);
+      const formattedHours = rhours !== 0 ? `${rhours} heure${rhours > 1 ? 's' : ''} et ` : '';
+      return `${formattedHours} ${rminutes} minute${rminutes > 1 ? 's' : ''}.`;
+    },
   },
   NOTE: {
     label: 'Note',

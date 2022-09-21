@@ -221,6 +221,7 @@ export const BabyTimelineFormDialog = ({ babyId, open, handleClose, mode, editSt
             <BabyTimelineTypeForm
               type={timelineType}
               initialState={typeFormState}
+              occurredAt={occurredAt}
               onStateChange={setTypeFormState}
               onValidChange={setTypeFormIsValid}
               disabled={loading}
