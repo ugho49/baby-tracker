@@ -41,6 +41,7 @@ export const NapForm = ({ onStateChange, onValidChange, disabled, occurredAt, in
       />
       <TextField
         label="Note"
+        disabled={disabled}
         fullWidth
         multiline
         minRows={2}

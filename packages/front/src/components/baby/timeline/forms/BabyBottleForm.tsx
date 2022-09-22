@@ -46,6 +46,7 @@ export const BabyBottleForm = ({ onStateChange, onValidChange, disabled, initial
         label="Note"
         fullWidth
         multiline
+        disabled={disabled}
         minRows={2}
         maxRows={15}
         value={note}

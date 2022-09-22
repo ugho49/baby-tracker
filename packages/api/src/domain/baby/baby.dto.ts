@@ -170,6 +170,7 @@ export class BreastfeedingDto implements Breastfeeding {
 
 export class MealDto implements Meal {
   @IsString()
+  @MaxLength(60)
   meal: string;
 
   @IsString()

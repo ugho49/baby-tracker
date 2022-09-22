@@ -49,6 +49,7 @@ export const DiaperForm = ({ onStateChange, onValidChange, disabled, initialStat
         label="Note"
         fullWidth
         multiline
+        disabled={disabled}
         minRows={2}
         maxRows={15}
         value={note}
