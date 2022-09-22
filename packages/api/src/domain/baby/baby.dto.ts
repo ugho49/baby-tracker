@@ -193,11 +193,12 @@ export class BabyBottleDto implements BabyBottle {
 
 export class ActivityDto implements Activity {
   @IsString()
+  @MaxLength(60)
   title: string;
 
   @IsString()
   @IsOptional()
-  description?: string;
+  note?: string;
 }
 
 export class DiaperDto implements Diaper {
@@ -214,10 +215,12 @@ export class DiaperDto implements Diaper {
 
 export class MedicineDto implements Medicine {
   @IsString()
+  @MaxLength(60)
   name: string;
 
   @IsString()
   @IsOptional()
+  @MaxLength(30)
   dosage?: string;
 
   @IsString()
@@ -236,6 +239,7 @@ export class NapDto implements Nap {
 
 export class NoteDto implements Note {
   @IsString()
+  @MaxLength(500)
   content: string;
 }
 

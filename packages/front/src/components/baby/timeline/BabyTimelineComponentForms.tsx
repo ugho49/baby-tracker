@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import { BabyTimelineType } from '@baby-tracker/common-types';
+import { DateTime } from 'luxon';
 import { BabyBottleForm } from './forms/BabyBottleForm';
 import { BreastfeedingForm } from './forms/BreastfeedingForm';
 import { DiaperForm } from './forms/DiaperForm';
 import { NapForm } from './forms/NapForm';
-import { DateTime } from 'luxon';
 import { MealForm } from './forms/MealForm';
+import { MedicineForm } from './forms/MedicineForm';
 
 export type FormProps<T> = {
   initialState?: T;
@@ -33,7 +34,7 @@ export const BabyTimelineComponentForms: { [key in BabyTimelineType]: (props: Fo
     DIAPER: DiaperForm,
     NAP: NapForm,
     MEAL: MealForm,
-    MEDICINE: (props) => <div>Medicine form</div>, // TODO
+    MEDICINE: MedicineForm,
     ACTIVITY: (props) => <div>Activity form</div>, // TODO
     NOTE: (props) => <div>Note form</div>, // TODO
   };

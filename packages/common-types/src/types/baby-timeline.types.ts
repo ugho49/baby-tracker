@@ -42,7 +42,7 @@ export type Meal = {
 
 export type Activity = {
   title: string;
-  description?: string;
+  note?: string;
 };
 
 export type Diaper = {

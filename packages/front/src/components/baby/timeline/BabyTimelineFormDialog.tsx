@@ -28,6 +28,7 @@ import { babyTrackerApiRef } from '../../../core';
 import { BabyTimelineTypeForm } from './BabyTimelineComponentForms';
 import { useDispatch } from 'react-redux';
 import { addTimelineEntry, deleteTimelineEntry, editTimelineEntry } from '../../../core/store/features';
+import { sleep } from '../../../utils';
 
 const Transition = forwardRef((props: TransitionProps & { children: React.ReactElement }, ref: React.Ref<unknown>) => {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -132,8 +133,9 @@ export const BabyTimelineFormDialog = ({ babyId, open, handleClose, mode, editSt
     try {
       setLoading(true);
       await api.deleteBabyTimeline(babyId, editState.id);
-      dispatch(deleteTimelineEntry(editState.id));
       handleClose();
+      await sleep(300);
+      dispatch(deleteTimelineEntry(editState.id));
     } catch (e) {
       setLoading(false);
       console.error(e); // TODO handle error properly
