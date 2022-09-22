@@ -107,6 +107,31 @@ export const babySlice = createSlice({
         }
       });
     },
+    deleteTimelineEntry: (state, action: PayloadAction<BabyTimelineEntry['id']>) => {
+      if (!state?.currentBaby?.timelineEntries) {
+        return;
+      }
+
+      const id = action.payload;
+
+      Object.entries(state.currentBaby.timelineEntries).forEach(([day, timelineEntries]) => {
+        const index = timelineEntries.findIndex((entry) => entry.id === id);
+
+        if (index === -1) {
+          return;
+        }
+
+        if (!state?.currentBaby?.timelineEntries) {
+          return;
+        }
+
+        state.currentBaby.timelineEntries[day].splice(index, 1);
+
+        if (state.currentBaby.timelineEntries[day].length === 0) {
+          delete state.currentBaby.timelineEntries[day];
+        }
+      });
+    },
     resetCurrentBaby: (state) => {
       state.currentBaby = undefined;
     },
@@ -124,6 +149,7 @@ export const {
   setTimeline,
   addTimelineEntry,
   editTimelineEntry,
+  deleteTimelineEntry,
   resetCurrentBaby,
   resetBabyState,
   timelineRefreshed,

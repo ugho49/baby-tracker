@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { TransitionProps } from '@mui/material/transitions';
 import { BabyTimelineType } from '@baby-tracker/common-types';
 import { BabyTimelineComponentDetails } from './BabyTimelineComponentDetails';
@@ -26,7 +27,7 @@ import { useApi } from '@baby-tracker/common-front';
 import { babyTrackerApiRef } from '../../../core';
 import { BabyTimelineTypeForm } from './BabyTimelineComponentForms';
 import { useDispatch } from 'react-redux';
-import { addTimelineEntry, editTimelineEntry } from '../../../core/store/features';
+import { addTimelineEntry, deleteTimelineEntry, editTimelineEntry } from '../../../core/store/features';
 
 const Transition = forwardRef((props: TransitionProps & { children: React.ReactElement }, ref: React.Ref<unknown>) => {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -121,6 +122,21 @@ export const BabyTimelineFormDialog = ({ babyId, open, handleClose, mode, editSt
       console.error(e); // TODO handle error properly
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteEntry = async () => {
+    if (mode !== 'edit') {
+      return;
+    }
+    try {
+      setLoading(true);
+      await api.deleteBabyTimeline(babyId, editState.id);
+      dispatch(deleteTimelineEntry(editState.id));
+      handleClose();
+    } catch (e) {
+      setLoading(false);
+      console.error(e); // TODO handle error properly
     }
   };
 
@@ -239,6 +255,20 @@ export const BabyTimelineFormDialog = ({ babyId, open, handleClose, mode, editSt
           >
             {mode === 'create' ? 'Créer' : 'Editer'}
           </Button>
+          {mode === 'edit' && (
+            <Button
+              fullWidth
+              variant="outlined"
+              color="error"
+              sx={{ mt: 5 }}
+              aria-label="delete"
+              disabled={loading}
+              startIcon={<DeleteIcon />}
+              onClick={() => deleteEntry()}
+            >
+              Supprimer
+            </Button>
+          )}
         </Box>
       </Container>
     </Dialog>
