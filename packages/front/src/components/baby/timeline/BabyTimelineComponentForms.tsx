@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { BabyTimelineEntry, BabyTimelineType } from '@baby-tracker/common-types';
-import { BabyBottleForm } from './types-form/BabyBottleForm';
-import { BreastfeedingForm } from './types-form/BreastfeedingForm';
-import { DiaperForm } from './types-form/DiaperForm';
-import { NapForm } from './types-form/NapForm';
+import { BabyTimelineType } from '@baby-tracker/common-types';
+import { BabyBottleForm } from './forms/BabyBottleForm';
+import { BreastfeedingForm } from './forms/BreastfeedingForm';
+import { DiaperForm } from './forms/DiaperForm';
+import { NapForm } from './forms/NapForm';
 import { DateTime } from 'luxon';
 
 export type FormProps<T> = {

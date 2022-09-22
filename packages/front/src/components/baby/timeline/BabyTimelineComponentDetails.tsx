@@ -81,11 +81,11 @@ export const BabyTimelineComponentDetails: { [key in BabyTimelineType]: Componen
     color: '#3d588d',
     computeDescription: (details: Nap) => {
       const hours = details.duration_minutes / 60;
-      const rhours = Math.floor(hours);
-      const minutes = (hours - rhours) * 60;
-      const rminutes = Math.round(minutes);
-      const formattedHours = rhours !== 0 ? `${rhours} heure${rhours > 1 ? 's' : ''} et ` : '';
-      return `${formattedHours} ${rminutes} minute${rminutes > 1 ? 's' : ''}.`;
+      const rHours = Math.floor(hours);
+      const minutes = (hours - rHours) * 60;
+      const rMinutes = Math.round(minutes);
+      const formattedHours = rHours !== 0 ? `${rHours} heure${rHours > 1 ? 's' : ''} et ` : '';
+      return `${formattedHours} ${rMinutes} minute${rMinutes > 1 ? 's' : ''}.`;
     },
   },
   NOTE: {
