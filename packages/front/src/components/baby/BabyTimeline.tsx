@@ -16,7 +16,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const REFRESH_THRESHOLD_SECONDS = 5 * 60; // 5 minutes
 
-const sortByDayAsc = (a: any, b: any): number => {
+type TimelineEntryDayType = [string, BabyTimelineEntryType[]];
+const sortByDayAsc = (a: TimelineEntryDayType, b: TimelineEntryDayType): number => {
   const [dayA] = a;
   const [dayB] = b;
   return DateTime.fromISO(dayA).toMillis() - DateTime.fromISO(dayB).toMillis();
