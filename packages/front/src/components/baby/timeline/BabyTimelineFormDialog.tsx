@@ -250,26 +250,28 @@ export const BabyTimelineFormDialog = ({ babyId, open, handleClose, mode, editSt
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 8, mb: 2 }}
             aria-label="save"
+            size="large"
             disabled={loading || !formIsValid}
             startIcon={<SaveIcon />}
           >
             {mode === 'create' ? 'Créer' : 'Editer'}
           </Button>
           {mode === 'edit' && (
-            <Button
-              fullWidth
-              variant="outlined"
-              color="error"
-              sx={{ mt: 5 }}
-              aria-label="delete"
-              disabled={loading}
-              startIcon={<DeleteIcon />}
-              onClick={() => deleteEntry()}
-            >
-              Supprimer
-            </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Button
+                variant="outlined"
+                color="error"
+                aria-label="delete"
+                disabled={loading}
+                size="small"
+                startIcon={<DeleteIcon />}
+                onClick={() => deleteEntry()}
+              >
+                Supprimer
+              </Button>
+            </Box>
           )}
         </Box>
       </Container>

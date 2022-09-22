@@ -8,6 +8,7 @@ import { NapForm } from './forms/NapForm';
 import { MealForm } from './forms/MealForm';
 import { MedicineForm } from './forms/MedicineForm';
 import { ActivityForm } from './forms/ActivityForm';
+import { NoteForm } from './forms/NoteForm';
 
 export type FormProps<T> = {
   initialState?: T;
@@ -37,5 +38,5 @@ export const BabyTimelineComponentForms: { [key in BabyTimelineType]: (props: Fo
     MEAL: MealForm,
     MEDICINE: MedicineForm,
     ACTIVITY: ActivityForm,
-    NOTE: (props) => <div>Note form</div>, // TODO
+    NOTE: NoteForm,
   };
