@@ -9,7 +9,7 @@ const DOSAGE_MAX_LENGTH = 30;
 
 export const MedicineForm = ({ onStateChange, onValidChange, disabled, initialState }: FormProps<Medicine>) => {
   const [name, setName] = useState<string>(initialState?.name || '');
-  const [dosage, setDosage] = useState<string | undefined>(initialState?.dosage || '');
+  const [dosage, setDosage] = useState<string | undefined>(initialState?.dosage);
   const [note, setNote] = useState<string | undefined>(initialState?.note);
 
   const nameMaxLengthExceeded = useMemo(() => name !== undefined && name.length > NAME_MAX_LENGTH, [name]);
