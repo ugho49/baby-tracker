@@ -19,13 +19,7 @@
             "name": "@nestjs/swagger/plugin"
           }
         ],
-        "assets": [
-          {
-            "input": "packages/api",
-            "glob": "**/*.env",
-            "output": "."
-          }
-        ]
+        "assets": []
       },
       "configurations": {
         "production": {
