@@ -11,10 +11,11 @@ import {
   TimelineSeparator,
 } from '@mui/lab';
 import { DateTime } from 'luxon';
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { BabyTimelineComponentDetails } from './BabyTimelineComponentDetails';
 import { makeStyles } from '@mui/styles';
 import { BabyTimelineFormDialog } from './BabyTimelineFormDialog';
+// import SpeakerNotesIcon from '@mui/icons-material/SpeakerNotes';
 
 const useStyles = makeStyles({
   item: {
@@ -61,9 +62,14 @@ export const BabyTimelineEntry = ({ babyId, authority, entry, first, last }: Bab
           <TimelineConnector sx={last ? transparent : undefined} />
         </TimelineSeparator>
         <TimelineContent>
-          <Typography variant="h6" component="div">
-            {componentsDetails.label}
-          </Typography>
+          <Stack sx={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Typography variant="h6" component="div">
+              {componentsDetails.label}
+            </Typography>
+            {/*<IconButton size="small">*/}
+            {/*  <SpeakerNotesIcon />*/}
+            {/*</IconButton>*/}
+          </Stack>
           <Typography>{componentsDetails.computeDescription(entry.details)}</Typography>
         </TimelineContent>
       </TimelineItem>

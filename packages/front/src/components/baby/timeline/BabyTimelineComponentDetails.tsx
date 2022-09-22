@@ -24,6 +24,7 @@ type ComponentDetails = {
   icon: React.ReactElement;
   color: string;
   computeDescription: (details: any) => React.ReactElement | string;
+  computeNote?: (details: any) => React.ReactElement | string;
 };
 
 export const BabyTimelineComponentDetails: { [key in BabyTimelineType]: ComponentDetails } = {
