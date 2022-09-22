@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { BabyWithUserAuthority } from '@baby-tracker/common-types';
+import { BabyTimelineEntry as BabyTimelineEntryType, BabyWithUserAuthority } from '@baby-tracker/common-types';
 import { Box, Button, Chip, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { BabyTimelineFormDialog } from './timeline/BabyTimelineFormDialog';
@@ -16,16 +16,14 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const REFRESH_THRESHOLD_SECONDS = 5 * 60; // 5 minutes
 
-const sortOccurredDateAsc = (a: any, b: any): number => {
+const sortByDayAsc = (a: any, b: any): number => {
   const [dayA] = a;
   const [dayB] = b;
   return DateTime.fromISO(dayA).toMillis() - DateTime.fromISO(dayB).toMillis();
 };
 
-const sortOccurredDateDesc = (a: any, b: any): number => {
-  const [dayA] = a;
-  const [dayB] = b;
-  return DateTime.fromISO(dayB).toMillis() - DateTime.fromISO(dayA).toMillis();
+const sortOccurredDateAsc = (a: BabyTimelineEntryType, b: BabyTimelineEntryType): number => {
+  return DateTime.fromISO(a.occurred_at).toMillis() - DateTime.fromISO(b.occurred_at).toMillis();
 };
 
 export type BabyTimelineProps = {
@@ -116,7 +114,8 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
         }}
       >
         {Object.entries(timelineEntries)
-          .sort(sortOccurredDateAsc)
+          .slice()
+          .sort(sortByDayAsc)
           .map(([day, entries]) => (
             <React.Fragment key={day}>
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -128,16 +127,19 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
                   size="small"
                 />
               </Box>
-              {entries.map((entry, i) => (
-                <BabyTimelineEntry
-                  key={entry.id}
-                  babyId={baby.id}
-                  authority={baby.relation.authority}
-                  entry={entry}
-                  first={i === 0}
-                  last={i + 1 === entries.length}
-                />
-              ))}
+              {entries
+                .slice()
+                .sort(sortOccurredDateAsc)
+                .map((entry, i) => (
+                  <BabyTimelineEntry
+                    key={entry.id}
+                    babyId={baby.id}
+                    authority={baby.relation.authority}
+                    entry={entry}
+                    first={i === 0}
+                    last={i + 1 === entries.length}
+                  />
+                ))}
             </React.Fragment>
           ))}
       </Timeline>
