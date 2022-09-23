@@ -18,6 +18,7 @@ import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import InterestsIcon from '@mui/icons-material/Interests';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
+import { Typography } from '@mui/material';
 
 type ComponentDetails = {
   label: string;
@@ -90,9 +91,9 @@ export const BabyTimelineComponentDetails: { [key in BabyTimelineType]: Componen
     },
   },
   NOTE: {
-    label: 'Note',
+    label: '',
     icon: <StickyNote2Icon />,
     color: '#aaaaaa',
-    computeDescription: (details: Note) => details.content,
+    computeDescription: (details: Note) => <Typography variant="body2">{details.content}</Typography>,
   },
 };

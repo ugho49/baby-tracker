@@ -100,6 +100,7 @@ export const BabyTimeline = ({ baby }: BabyTimelineProps) => {
       <Timeline
         sx={{
           padding: 0,
+          paddingBottom: '40px',
           [`& .${timelineOppositeContentClasses.root}`]: {
             m: 'auto 0',
             padding: '6px 10px',
