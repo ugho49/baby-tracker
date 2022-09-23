@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Nap } from '@baby-tracker/common-types';
 import { Stack, TextField } from '@mui/material';
-import { FormProps } from '../BabyTimelineComponentForms';
+import { FormProps } from '../BabyTimelineComponentDetails';
 import { DateTime, Interval } from 'luxon';
 import { MobileTimePicker } from '@mui/x-date-pickers';
 

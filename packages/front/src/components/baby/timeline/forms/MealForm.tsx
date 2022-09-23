@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Meal } from '@baby-tracker/common-types';
 import { Stack, TextField } from '@mui/material';
-import { FormProps } from '../BabyTimelineComponentForms';
+import { FormProps } from '../BabyTimelineComponentDetails';
 import { isBlank } from '../../../../utils';
 
 const MEAL_MAX_LENGTH = 60;

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Medicine } from '@baby-tracker/common-types';
 import { Stack, TextField } from '@mui/material';
-import { FormProps } from '../BabyTimelineComponentForms';
+import { FormProps } from '../BabyTimelineComponentDetails';
 import { isBlank } from '../../../../utils';
 
 const NAME_MAX_LENGTH = 60;

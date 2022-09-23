@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BabyBottle, BabyBottleUnit, BabyBottleUnitType } from '@baby-tracker/common-types';
 import { Stack, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { FormProps } from '../BabyTimelineComponentForms';
+import { FormProps } from '../BabyTimelineComponentDetails';
 
 export const BabyBottleForm = ({ onStateChange, onValidChange, disabled, initialState }: FormProps<BabyBottle>) => {
   const [quantity, setQuantity] = useState<number | undefined>(initialState?.quantity || 1);

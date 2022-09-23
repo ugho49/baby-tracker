@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Note } from '@baby-tracker/common-types';
 import { TextField } from '@mui/material';
-import { FormProps } from '../BabyTimelineComponentForms';
+import { FormProps } from '../BabyTimelineComponentDetails';
 import { isBlank } from '../../../../utils';
 
 const CONTENT_MAX_LENGTH = 500;

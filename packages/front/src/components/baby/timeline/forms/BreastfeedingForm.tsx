@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Breastfeeding } from '@baby-tracker/common-types';
 import { Stack, ToggleButton, Typography } from '@mui/material';
-import { FormProps } from '../BabyTimelineComponentForms';
+import { FormProps } from '../BabyTimelineComponentDetails';
 import FavoriteBorderTwoToneIcon from '@mui/icons-material/FavoriteBorderTwoTone';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import { makeStyles } from '@mui/styles';

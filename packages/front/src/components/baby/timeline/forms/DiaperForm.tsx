@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Diaper } from '@baby-tracker/common-types';
 import { Stack, TextField, ToggleButton } from '@mui/material';
-import { FormProps } from '../BabyTimelineComponentForms';
+import { FormProps } from '../BabyTimelineComponentDetails';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
